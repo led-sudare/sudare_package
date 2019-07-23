@@ -1,0 +1,14 @@
+[Unit]
+Description = sudare pi
+After = rc-local.service
+ 
+[Service]
+Type = simple
+WorkingDirectory = /home/pi/sudare_pi
+ExecStart = /home/pi/sudare_pi/sudare_pi 1234 4567 10
+StandardOutput = journal
+Restart = on-failure
+RestartSec = 3s
+ 
+[Install]
+WantedBy = multi-user.target

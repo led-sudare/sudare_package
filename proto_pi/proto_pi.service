@@ -1,0 +1,15 @@
+[Unit]
+Description = proto pi
+After = rc-local.service
+ 
+[Service]
+Type = simple
+WorkingDirectory = /home/pi/proto_pi
+ExecStart = /home/pi/proto_pi/proto_pi 10
+StandardOutput = journal
+StandardError = journal
+Restart = on-failure
+RestartSec = 3s
+ 
+[Install]
+WantedBy = multi-user.target

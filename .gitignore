@@ -1,0 +1,10 @@
+*
+
+!*/
+!*.cpp
+!*.h
+!*.hpp
+!*.md
+!Makefile
+!.gitignore
+!*.service
