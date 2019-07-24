@@ -25,7 +25,7 @@ class TimeMeter {
 template <typename Publisher>
 class Sudare {
   std::chrono::time_point<std::chrono::system_clock> m_last_sleep_time;
-  enum mode { rectangular_mode = 0, polar_mode = 1 } m_mode;
+  enum mode_t { rectangular_mode = 0, polar_mode = 1 } m_mode;
   sudare::rectangular m_rect;
   sudare::polar m_polar;
   sudare::converter m_conv;
