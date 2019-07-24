@@ -22,7 +22,7 @@ int main(int argc, const char *argv[]) {
     sudare::udp_server udp(atoi(argv[2]));
     sudare::fpga_ctrl fpga(atoi(argv[3]));
     zmq_pollitem_t items[] = {{zmq.socket(), 0, ZMQ_POLLIN, 0},
-                              {0, udp.getFd(), ZMQ_POLLIN, 0}};
+                              {0, udp.fd(), ZMQ_POLLIN, 0}};
     std::array<char, CUBE_PKT_SIZE> cube;
     sudare::rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
     sudare::polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);

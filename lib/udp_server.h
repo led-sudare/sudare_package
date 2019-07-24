@@ -12,6 +12,6 @@ class udp_server {
   explicit udp_server(int port);
   virtual ~udp_server();
   int recv(char *buf, int size) const;
-  int getFd() const { return m_fd; }
+  int fd() const { return m_fd; }
 };
 }  // namespace sudare
