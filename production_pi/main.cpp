@@ -8,10 +8,10 @@
 #include "udp_server.h"
 #include "zmq_utils.h"
 
-#define LED_WIDTH 16
-#define LED_HEIGHT 32
-#define LED_DEPTH 8
-#define CUBE_PKT_SIZE LED_WIDTH *LED_HEIGHT *LED_DEPTH * 2
+#define CUBE_WIDTH 16
+#define CUBE_HEIGHT 32
+#define CUBE_DEPTH 8
+#define CUBE_PKT_SIZE CUBE_WIDTH *CUBE_HEIGHT *CUBE_DEPTH * 2
 
 int main(int argc, const char *argv[]) {
   try {
@@ -24,7 +24,7 @@ int main(int argc, const char *argv[]) {
     zmq_pollitem_t items[] = {{zmq.socket(), 0, ZMQ_POLLIN, 0},
                               {0, udp.fd(), ZMQ_POLLIN, 0}};
     std::array<char, CUBE_PKT_SIZE> cube;
-    sudare::rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
+    sudare::rectangular rect(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH);
     sudare::polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
     sudare::converter convert(rect, polar);
     for (int n = 0;;) {

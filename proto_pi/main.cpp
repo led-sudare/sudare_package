@@ -6,9 +6,9 @@
 #include <vector>
 #include "sudare.h"
 
-#define LED_WIDTH 30
-#define LED_HEIGHT 100
-#define LED_DEPTH 30
+#define CUBE_WIDTH 30
+#define CUBE_HEIGHT 100
+#define CUBE_DEPTH 30
 
 int N = 100;
 int get_power(int ix) {
@@ -31,14 +31,14 @@ t max3(t const& a, t const& b, t const& c) {
 template <typename proc_t>
 void concentric(proc_t const& proc) {
   for (int ix = 0; ix < N; ++ix) {
-    int cx = LED_WIDTH / 2;
-    int cy = LED_HEIGHT / 2;
-    int cz = LED_DEPTH / 2;
+    int cx = CUBE_WIDTH / 2;
+    int cy = CUBE_HEIGHT / 2;
+    int cz = CUBE_DEPTH / 2;
     Clear();
     int power = get_power(ix);
-    for (int x = 0; x < LED_WIDTH; ++x) {
-      for (int y = 0; y < LED_HEIGHT; ++y) {
-        for (int z = 0; z < LED_DEPTH; ++z) {
+    for (int x = 0; x < CUBE_WIDTH; ++x) {
+      for (int y = 0; y < CUBE_HEIGHT; ++y) {
+        for (int z = 0; z < CUBE_DEPTH; ++z) {
           double d = proc(x - cx, y - cy, z - cz, ix * 1.0 / N);
           int col0 = static_cast<int>(std::round(ix - d)) % 64;
           int col = (col0 % 6) == 0 ? col0 % 7 + 1 : 0;
@@ -110,8 +110,8 @@ xyz_t sphere_face(std::mt19937& rng) {
 }
 
 bool can_show(xyz_t const& p) {
-  return 0 <= p.x && p.x < LED_WIDTH && 0 <= p.y && p.y < LED_HEIGHT &&
-         0 <= p.z && p.z < LED_DEPTH;
+  return 0 <= p.x && p.x < CUBE_WIDTH && 0 <= p.y && p.y < CUBE_HEIGHT &&
+         0 <= p.z && p.z < CUBE_DEPTH;
 }
 
 void color_cube() {
@@ -166,9 +166,9 @@ void color_cube() {
           zo * (-p1.x * sin(t1) + p1.y * cos(t1)),
           zo * p1.z,
       };
-      double x = (p.x / 2 + 0.5) * (LED_WIDTH - 1);
-      double y = (p.y / 2 + 0.5) * (LED_HEIGHT - 1);
-      double z = (p.z / 2 + 0.5) * (LED_DEPTH - 1);
+      double x = (p.x / 2 + 0.5) * (CUBE_WIDTH - 1);
+      double y = (p.y / 2 + 0.5) * (CUBE_HEIGHT - 1);
+      double z = (p.z / 2 + 0.5) * (CUBE_DEPTH - 1);
       if (can_show({x, y, z})) {
         SetLed(x, y, z, p0.color);
       }
@@ -208,9 +208,9 @@ void fireworks() {
   for (int ix = 0; ix < N; ++ix) {
     Clear();
     if (ix % 20 == 0 && 20 < N - ix) {
-      double cx = LED_WIDTH * dist(rng);
-      double cy = LED_HEIGHT * dist(rng);
-      double cz = LED_DEPTH * dist(rng);
+      double cx = CUBE_WIDTH * dist(rng);
+      double cy = CUBE_HEIGHT * dist(rng);
+      double cz = CUBE_DEPTH * dist(rng);
       for (int i = 0; i < PS; ++i) {
         vs.push_back(sphere_face(rng));
         poss.push_back({{cx, cy, cz}, rgb(vs.back().len())});
@@ -257,7 +257,7 @@ void repbang() {
           std::sin(t) * p.p.x + std::cos(t) * p.p.z,
       };
       xyz_t pos =
-          q * r * LED_HEIGHT + xyz(LED_WIDTH, LED_HEIGHT, LED_DEPTH) * 0.5;
+          q * r * CUBE_HEIGHT + xyz(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH) * 0.5;
 
       if (can_show(pos)) {
         SetLed(pos.x, pos.y, pos.z, p.color);
@@ -305,11 +305,11 @@ void spiral() {
     Clear();
     int d = i < D ? i : N < i + D ? N - i : D;
     for (auto& pc : pcs) {
-      double y = int((pc.p.y) * LED_HEIGHT + N - i * U) % LED_HEIGHT;
+      double y = int((pc.p.y) * CUBE_HEIGHT + N - i * U) % CUBE_HEIGHT;
       double x =
-          (pc.p.r * std::cos(pc.p.t + i * T)) * LED_WIDTH / 2 + LED_WIDTH / 2;
+          (pc.p.r * std::cos(pc.p.t + i * T)) * CUBE_WIDTH / 2 + CUBE_WIDTH / 2;
       double z =
-          (pc.p.r * std::sin(pc.p.t + i * T)) * LED_WIDTH / 2 + LED_DEPTH / 2;
+          (pc.p.r * std::sin(pc.p.t + i * T)) * CUBE_WIDTH / 2 + CUBE_DEPTH / 2;
       if (can_show({x, y, z})) {
         SetLed(x, y, z, darken(pc.c, d));
       }
@@ -325,13 +325,13 @@ void brown() {
     int x, y, z;
   };
   std::deque<pos_t> poses[3]{
-      {{LED_WIDTH / 2, LED_HEIGHT / 4, LED_DEPTH / 2}},
-      {{LED_WIDTH / 2, LED_HEIGHT / 2, LED_DEPTH / 2}},
-      {{LED_WIDTH / 2, LED_HEIGHT * 3 / 4, LED_DEPTH / 2}}};
+      {{CUBE_WIDTH / 2, CUBE_HEIGHT / 4, CUBE_DEPTH / 2}},
+      {{CUBE_WIDTH / 2, CUBE_HEIGHT / 2, CUBE_DEPTH / 2}},
+      {{CUBE_WIDTH / 2, CUBE_HEIGHT * 3 / 4, CUBE_DEPTH / 2}}};
 
   auto normalize = [](pos_t const& s) -> pos_t {
-    return {(s.x + LED_WIDTH) % LED_WIDTH, (s.y + LED_HEIGHT) % LED_HEIGHT,
-            (s.z + LED_DEPTH) % LED_DEPTH};
+    return {(s.x + CUBE_WIDTH) % CUBE_WIDTH, (s.y + CUBE_HEIGHT) % CUBE_HEIGHT,
+            (s.z + CUBE_DEPTH) % CUBE_DEPTH};
   };
   auto move = [](pos_t const& s) -> pos_t {
     switch (rand() % 12) {
@@ -459,9 +459,9 @@ void gala() {
           y,
           std::sin(U) * x + std::cos(U) * z,
       };
-      xyz_t pos{p.x * LED_WIDTH / 2 + LED_WIDTH / 2,
-                p.y * LED_WIDTH / 2 + LED_HEIGHT / 2,
-                p.z * LED_WIDTH / 2 + LED_DEPTH / 2};
+      xyz_t pos{p.x * CUBE_WIDTH / 2 + CUBE_WIDTH / 2,
+                p.y * CUBE_WIDTH / 2 + CUBE_HEIGHT / 2,
+                p.z * CUBE_WIDTH / 2 + CUBE_DEPTH / 2};
       if (can_show(pos)) {
         SetLed(pos.x, pos.y, pos.z, darken(star.c, d));
       }
@@ -480,9 +480,9 @@ void balls() {
   std::mt19937 rng;
   for (int i = 1; i < 7; ++i) {
     ps.push_back(
-        {{static_cast<double>(i & 1 ? 0 : LED_WIDTH),
-          static_cast<double>(i & 2 ? 0 : LED_HEIGHT),
-          static_cast<double>(i & 4 ? 0 : LED_DEPTH)},
+        {{static_cast<double>(i & 1 ? 0 : CUBE_WIDTH),
+          static_cast<double>(i & 2 ? 0 : CUBE_HEIGHT),
+          static_cast<double>(i & 4 ? 0 : CUBE_DEPTH)},
          {0, 0, 0},
          (i & 1 ? 0xff0000 : 0) + (i & 2 ? 0xff00 : 0) + (i & 4 ? 0xff : 0)});
   }
@@ -494,9 +494,9 @@ void balls() {
       if (ix < N && (!can_show(p.p) || p.v.len() == 0)) {
         xyz_t dir;
         for (;;) {
-          xyz_t dest{static_cast<double>(rng() % LED_WIDTH),
-                     static_cast<double>(rng() % LED_HEIGHT),
-                     static_cast<double>(rng() % LED_DEPTH)};
+          xyz_t dest{static_cast<double>(rng() % CUBE_WIDTH),
+                     static_cast<double>(rng() % CUBE_HEIGHT),
+                     static_cast<double>(rng() % CUBE_DEPTH)};
           dir = dest - p.p;
           if (dir.len() != 0) {
             break;
@@ -577,12 +577,12 @@ void threed() {
   };
   std::vector<pp_t> pps;
   while (pps.size() < 2000) {
-    xyz_t a{static_cast<double>(rng() % LED_WIDTH),
-            static_cast<double>(rng() % LED_HEIGHT),
-            static_cast<double>(rng() % LED_DEPTH)};
-    xyz_t b{static_cast<double>(rng() % LED_WIDTH),
-            static_cast<double>(rng() % LED_HEIGHT),
-            static_cast<double>(rng() % LED_DEPTH)};
+    xyz_t a{static_cast<double>(rng() % CUBE_WIDTH),
+            static_cast<double>(rng() % CUBE_HEIGHT),
+            static_cast<double>(rng() % CUBE_DEPTH)};
+    xyz_t b{static_cast<double>(rng() % CUBE_WIDTH),
+            static_cast<double>(rng() % CUBE_HEIGHT),
+            static_cast<double>(rng() % CUBE_DEPTH)};
     if (col_at2(a, 0) && col_at2(b, 1)) {
       pps.push_back({{a, b}});
     }
@@ -640,15 +640,15 @@ void wave() {
     double yt = 3.14 * 2 * 1.41;
     double LT = 20.0;
     double light = i < LT ? i / LT : N0 - i < LT ? (N0 - i) / LT : 1;
-    for (int iy = 0; iy < LED_HEIGHT; ++iy) {
-      for (int ix = 0; ix < LED_WIDTH; ++ix) {
-        double x = xt * (ix - LED_WIDTH / 2) / LED_WIDTH * 2;
-        double y = yt * (iy - LED_HEIGHT / 2) / LED_HEIGHT * 2;
+    for (int iy = 0; iy < CUBE_HEIGHT; ++iy) {
+      for (int ix = 0; ix < CUBE_WIDTH; ++ix) {
+        double x = xt * (ix - CUBE_WIDTH / 2) / CUBE_WIDTH * 2;
+        double y = yt * (iy - CUBE_HEIGHT / 2) / CUBE_HEIGHT * 2;
         double iz = static_cast<int>(
-            sin(x) * sin(y) * sin(i * it) * LED_DEPTH / 2 + LED_DEPTH / 2);
+            sin(x) * sin(y) * sin(i * it) * CUBE_DEPTH / 2 + CUBE_DEPTH / 2);
         auto col = [&](double t) -> int {
-          double dx = (ix - LED_WIDTH / 2);
-          double dy = (iy - LED_HEIGHT / 2);
+          double dx = (ix - CUBE_WIDTH / 2);
+          double dy = (iy - CUBE_HEIGHT / 2);
           double d = std::pow(dx * dx + dy * dy, 0.7) / 10.0 + t + i * it;
           double W = sin(3.1416 * 7 / 6);
           double v = sin(d) < W ? 0 : (sin(d) - W) / (1 - W);
@@ -674,7 +674,7 @@ int main(int argc, const char* argv[]) {
     std::cout << "Input [spi CLOCK(MHz)]" << std::endl;
     return 1;
   }
-  if (InitSdk(LED_WIDTH, LED_HEIGHT, LED_DEPTH, atoi(argv[1]))) {
+  if (InitSdk(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH, atoi(argv[1]))) {
     return 1;
   }
 #if 1

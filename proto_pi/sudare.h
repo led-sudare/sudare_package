@@ -14,9 +14,9 @@ int InitSdk(int width, int height, int depth, uint8_t clock_MHz);
 /**
  Specify the color of each LED.
  Just by calling this function, drawing data is not transferred to 3D LED CUBE.
- @param[in] x 0 <= x < LED_WIDTH
- @param[in] y 0 <= y < LED_HEIGHT
- @param[in] z 0 <= z < LED_DEPTH
+ @param[in] x 0 <= x < CUBE_WIDTH
+ @param[in] y 0 <= y < CUBE_HEIGHT
+ @param[in] z 0 <= z < CUBE_DEPTH
  @param[in] rgb 0x000000 <= rgb <= 0xFFFFFF
 */
 void SetLed(int x, int y, int z, int rgb);
