@@ -25,11 +25,11 @@ class TimeMeter {
 class Sudare {
   std::chrono::time_point<std::chrono::system_clock> m_last_sleep_time;
   enum mode { rectangular_mode = 0, polar_mode = 1 } m_mode;
-  rectangular m_rect;
-  polar m_polar;
-  converter m_conv;
-  zmq_initializer m_zmq_init;
-  zmq_client m_zmq_client;
+  sudare::rectangular m_rect;
+  sudare::polar m_polar;
+  sudare::converter m_conv;
+  sudare::zmq_initializer m_zmq_init;
+  sudare::zmq_client m_zmq_client;
 
  public:
   explicit Sudare(const char* dst)
@@ -72,12 +72,12 @@ class Sudare {
     m_last_sleep_time = std::chrono::system_clock::now();
   }
 };
-std::shared_ptr<Sudare> sudare;
+std::shared_ptr<Sudare> s;
 }  // namespace
 
 int sudare_init_sdk(const char* dst) {
   try {
-    sudare = std::make_shared<Sudare>(dst);
+    s = std::make_shared<Sudare>(dst);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -87,7 +87,7 @@ int sudare_init_sdk(const char* dst) {
 
 int sudare_set_led_rect(int x, int y, int z, int rgb) {
   try {
-    sudare->set_led_rect(x, y, z, rgb);
+    s->set_led_rect(x, y, z, rgb);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -97,7 +97,7 @@ int sudare_set_led_rect(int x, int y, int z, int rgb) {
 
 int sudare_set_led_polar(int a, int r, int h, int rgb) {
   try {
-    sudare->set_led_polar(a, r, h, rgb);
+    s->set_led_polar(a, r, h, rgb);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -107,7 +107,7 @@ int sudare_set_led_polar(int a, int r, int h, int rgb) {
 
 int sudare_clear(void) {
   try {
-    sudare->clear();
+    s->clear();
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -117,7 +117,7 @@ int sudare_clear(void) {
 
 int sudare_send(void) {
   try {
-    sudare->send();
+    s->send();
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -127,7 +127,7 @@ int sudare_send(void) {
 
 int sudare_sleep(int ms) {
   try {
-    sudare->sleep(ms);
+    s->sleep(ms);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;

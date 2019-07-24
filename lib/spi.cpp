@@ -9,7 +9,7 @@
 
 namespace sudare {
 spi::spi(int clock) : m_clock(clock) {
-  std::cout << "SPI CLOCK : " << clock << "Hz" << std::endl;
+  std::cout << "spi CLOCK : " << clock << "Hz" << std::endl;
 #ifdef ENABLE_SPI
   const char *dev = "/dev/spidev0.0";
   int res = open(dev, O_RDWR);

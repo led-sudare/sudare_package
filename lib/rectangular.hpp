@@ -43,8 +43,8 @@ class rectangular {
   /** 奥行き取得 */
   size_t getD() const { return m_d; }
   /** 色設定 */
-  void set(int x, int y, int z, int rgb) {
-    if (contains(x, y, z)) m[address(x, y, z)] = rgb(rgb);
+  void set(int x, int y, int z, int color) {
+    if (contains(x, y, z)) m[address(x, y, z)] = rgb(color);
   }
   /** 3D LEDパケットからの一括入力 */
   void from3DLED(uint8_t const* p) {

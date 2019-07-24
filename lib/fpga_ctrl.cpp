@@ -27,7 +27,7 @@ void fpga_ctrl::spi_write(const char *p, int size, int cs) const {
 
 void fpga_ctrl::spi_log() const {
   float percent = 100.0f * m_total_sent / ((hlen + dlen + 1) * angles);
-  printf("SPI TX SIZE = %d (%.1f%%) TX COUNT = %d\n", m_total_sent, percent,
+  printf("spi TX SIZE = %d (%.1f%%) TX COUNT = %d\n", m_total_sent, percent,
          m_sent_count);
   m_total_sent = 0;
   m_sent_count = 0;

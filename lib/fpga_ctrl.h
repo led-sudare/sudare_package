@@ -14,7 +14,7 @@ class fpga_ctrl {
   mutable std::array<char, SUDARE_PKT_SIZE> m_cache;
   mutable int m_total_sent;
   mutable int m_sent_count;
-  SPI m_spi;
+  spi m_spi;
   void spi_write(const char *p, int size, int cs) const;
   void spi_log() const;
   /**通常の通信モード */

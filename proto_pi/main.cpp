@@ -671,7 +671,7 @@ void wave() {
 
 int main(int argc, const char* argv[]) {
   if (argc <= 1) {
-    std::cout << "Input [SPI CLOCK(MHz)]" << std::endl;
+    std::cout << "Input [spi CLOCK(MHz)]" << std::endl;
     return 1;
   }
   if (InitSdk(LED_WIDTH, LED_HEIGHT, LED_DEPTH, atoi(argv[1]))) {

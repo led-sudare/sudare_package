@@ -24,13 +24,13 @@ int main(int argc, const char *argv[]) {
     const char *target = argv[2];
     std::cout << "MY PORT : " << my_port << "\nTARGET PORT: " << target
               << std::endl;
-    udp_server rx(my_port);
-    zmq_initializer zmq_init;
-    zmq_client tx(zmq_init.context(), target);
+    sudare::udp_server rx(my_port);
+    sudare::zmq_initializer zmq_init;
+    sudare::zmq_client tx(zmq_init.context(), target);
+    sudare::rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
+    sudare::polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
+    sudare::converter convert(rect, polar);
     std::array<char, CUBE_PKT_SIZE> cube;
-    rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
-    polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
-    converter conv(rect, polar);
     for (;;) {
       int size = rx.recv(cube.data(), cube.size());
       if (size != cube.size()) {
@@ -39,7 +39,7 @@ int main(int argc, const char *argv[]) {
         continue;
       }
       rect.from3DLED(reinterpret_cast<uint8_t *>(cube.data()));
-      conv();
+      convert();
       tx.send(reinterpret_cast<char *>(polar.data()), polar.size());
     }
   } catch (std::exception const &e) {

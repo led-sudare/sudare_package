@@ -12,18 +12,19 @@
 #define POLAR_RADIUS 15
 
 namespace {
-std::shared_ptr<rectangular> s_rect;
-std::shared_ptr<polar> s_polar;
-std::shared_ptr<converter> s_conv;
-std::shared_ptr<SPI> s_spi;
+std::shared_ptr<sudare::rectangular> s_rect;
+std::shared_ptr<sudare::polar> s_polar;
+std::shared_ptr<sudare::converter> s_conv;
+std::shared_ptr<sudare::spi> s_spi;
 }  // namespace
 
 int InitSdk(int width, int height, int depth, uint8_t clock_MHz) {
   try {
-    s_rect = std::make_shared<rectangular>(width, height, depth);
-    s_polar = std::make_shared<polar>(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT);
-    s_conv = std::make_shared<converter>(*s_rect, *s_polar);
-    s_spi = std::make_shared<SPI>(10 * 1000 * 1000);
+    s_rect = std::make_shared<sudare::rectangular>(width, height, depth);
+    s_polar = std::make_shared<sudare::polar>(POLAR_ANGLES, POLAR_RADIUS,
+                                              POLAR_HEIGHT);
+    s_conv = std::make_shared<sudare::converter>(*s_rect, *s_polar);
+    s_spi = std::make_shared<sudare::spi>(10 * 1000 * 1000);
     return 0;
   } catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;
@@ -61,13 +62,13 @@ void Wait(int ms) {
 }
 
 void DrawAll(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb rgb(red, green, blue);
+  sudare::rgb color(red, green, blue);
   for (uint8_t a = 0; a < 60; ++a) {
     std::array<uint8_t, 3004> pkt{2, 0, 0};  // WR, AD0, AD1
     pkt.back() = a;
     uint8_t *p = pkt.data() + 3;
     for (int r = 1; r <= 15; ++r)
-      for (int y = 0; y < 100; ++y, p += 2) rgb.to565(p);
+      for (int y = 0; y < 100; ++y, p += 2) color.to565(p);
     s_spi->write(reinterpret_cast<char *>(pkt.data()), pkt.size(),
                  0);  // buf, len, cs
   }
