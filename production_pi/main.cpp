@@ -26,7 +26,7 @@ int main(int argc, const char *argv[]) {
     std::array<char, CUBE_PKT_SIZE> cube;
     sudare::rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
     sudare::polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
-    sudare::converter conv(rect, polar);
+    sudare::converter convert(rect, polar);
     for (int n = 0;;) {
       if (zmq_poll(items, 2, -1) < 0) sudare::error("zmq_poll");
       if (items[0].revents & ZMQ_POLLIN) {
@@ -46,7 +46,7 @@ int main(int argc, const char *argv[]) {
         printf("%08d UDP Packet size : %d\n", ++n, size);
         if (size == cube.size()) {
           rect.from3DLED(reinterpret_cast<uint8_t *>(cube.data()));
-          conv();
+          convert();
           fpga.write(reinterpret_cast<char *>(polar.data()));
         }
       }
