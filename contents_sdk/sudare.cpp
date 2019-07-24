@@ -25,9 +25,9 @@ class TimeMeter {
 class Sudare {
   std::chrono::time_point<std::chrono::system_clock> m_last_sleep_time;
   enum mode { rectangular_mode = 0, polar_mode = 1 } m_mode;
-  Rectangular m_rect;
-  Polar m_polar;
-  Converter m_conv;
+  rectangular m_rect;
+  polar m_polar;
+  converter m_conv;
   zmq_initializer m_zmq_init;
   zmq_client m_zmq_client;
 

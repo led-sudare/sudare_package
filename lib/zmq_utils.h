@@ -1,5 +1,6 @@
 #pragma once
 
+namespace sudare {
 class zmq_initializer {
   void* m_context;
 
@@ -28,3 +29,4 @@ class zmq_client {
   void send(const char* buf, int size) const;
   void* socket() const { return m_socket; }
 };
+}  // namespace sudare

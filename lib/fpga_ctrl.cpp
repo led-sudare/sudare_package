@@ -4,6 +4,7 @@
 #include <unistd.h>  // close, usleep
 #include <iostream>
 
+namespace sudare {
 namespace {
 const int hlen = 3;
 const int dlen = SUDARE_WIDTH * SUDARE_HEIGHT;
@@ -95,3 +96,4 @@ void fpga_ctrl::write2(const char *p) const {
   }
   spi_log();
 }
+}  // namespace sudare

@@ -24,9 +24,9 @@ int main(int argc, const char *argv[]) {
     zmq_pollitem_t items[] = {{zmq.socket(), 0, ZMQ_POLLIN, 0},
                               {0, udp.getFd(), ZMQ_POLLIN, 0}};
     std::array<char, CUBE_PKT_SIZE> cube;
-    Rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
-    Polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
-    Converter conv(rect, polar);
+    rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
+    polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
+    converter conv(rect, polar);
     for (int n = 0;;) {
       if (zmq_poll(items, 2, -1) < 0) error("zmq_poll");
       if (items[0].revents & ZMQ_POLLIN) {

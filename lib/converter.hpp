@@ -3,14 +3,14 @@
 #include "polar.hpp"
 #include "rectangular.hpp"
 
-class Converter {
-  Rectangular const& m_rect;
-  Polar& m_polar;
+class converter {
+  rectangular const& m_rect;
+  polar& m_polar;
   std::vector<double> m_sin;
   std::vector<double> m_cos;
 
  public:
-  Converter(Rectangular const& rect, Polar& polar)
+  converter(rectangular const& rect, polar& polar)
       : m_rect(rect),
         m_polar(polar),
         m_sin(polar.angles()),
@@ -31,7 +31,7 @@ class Converter {
         double az = (m_polar.radius() + m_sin[a] * r) * rz;
         for (int y = 0; y < m_polar.height(); ++y) {
           double ay = y * ry;
-          RGB rgb = m_rect.getBL(ax, ay, az);
+          rgb rgb = m_rect.getBL(ax, ay, az);
           m_polar.set(a, r, y, rgb);
         }
       }

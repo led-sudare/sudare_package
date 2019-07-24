@@ -12,17 +12,17 @@
 #define POLAR_RADIUS 15
 
 namespace {
-std::shared_ptr<Rectangular> s_rect;
-std::shared_ptr<Polar> s_polar;
-std::shared_ptr<Converter> s_conv;
+std::shared_ptr<rectangular> s_rect;
+std::shared_ptr<polar> s_polar;
+std::shared_ptr<converter> s_conv;
 std::shared_ptr<SPI> s_spi;
 }  // namespace
 
 int InitSdk(int width, int height, int depth, uint8_t clock_MHz) {
   try {
-    s_rect = std::make_shared<Rectangular>(width, height, depth);
-    s_polar = std::make_shared<Polar>(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT);
-    s_conv = std::make_shared<Converter>(*s_rect, *s_polar);
+    s_rect = std::make_shared<rectangular>(width, height, depth);
+    s_polar = std::make_shared<polar>(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT);
+    s_conv = std::make_shared<converter>(*s_rect, *s_polar);
     s_spi = std::make_shared<SPI>(10 * 1000 * 1000);
     return 0;
   } catch (std::exception const &e) {
@@ -61,7 +61,7 @@ void Wait(int ms) {
 }
 
 void DrawAll(uint8_t red, uint8_t green, uint8_t blue) {
-  RGB rgb(red, green, blue);
+  rgb rgb(red, green, blue);
   for (uint8_t a = 0; a < 60; ++a) {
     std::array<uint8_t, 3004> pkt{2, 0, 0};  // WR, AD0, AD1
     pkt.back() = a;

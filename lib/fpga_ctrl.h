@@ -9,6 +9,7 @@
 #define SUDARE_ANGLES 360 / SUDARE_ANGLE_RESOLUTION
 #define SUDARE_PKT_SIZE SUDARE_WIDTH *SUDARE_HEIGHT *SUDARE_ANGLES
 
+namespace sudare {
 class fpga_ctrl {
   mutable std::array<char, SUDARE_PKT_SIZE> m_cache;
   mutable int m_total_sent;
@@ -29,3 +30,4 @@ class fpga_ctrl {
   /**@param[in] p SUDARE PACKET begin address*/
   void write(const char *p) const { write2(p); }
 };
+}  // namespace sudare

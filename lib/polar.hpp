@@ -3,7 +3,7 @@
 #include <vector>
 #include "rgb.hpp"
 
-class Polar {
+class polar {
   int m_angles;
   int m_radius;
   int m_height;
@@ -19,14 +19,14 @@ class Polar {
   }
 
  public:
-  Polar(int angles, int radius, int height)
+  polar(int angles, int radius, int height)
       : m_angles(angles),
         m_radius(radius),
         m_height(height),
         m(angles * radius * height * 2) {}
   void clear() { std::fill(m.begin(), m.end(), 0); }
-  void set(int a, int r, int h, int rgb) { set(a, r, h, RGB(rgb)); }
-  void set(int a, int r, int h, RGB rgb) {
+  void set(int a, int r, int h, int rgb) { set(a, r, h, rgb(rgb)); }
+  void set(int a, int r, int h, rgb rgb) {
     if (contains(a, r, h)) rgb.to565(data(a, r, h));
   }
   uint8_t* data(int a, int r, int h) { return m.data() + index(a, r, h); }

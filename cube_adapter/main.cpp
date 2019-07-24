@@ -28,9 +28,9 @@ int main(int argc, const char *argv[]) {
     zmq_initializer zmq_init;
     zmq_client tx(zmq_init.context(), target);
     std::array<char, CUBE_PKT_SIZE> cube;
-    Rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
-    Polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
-    Converter conv(rect, polar);
+    rectangular rect(LED_WIDTH, LED_HEIGHT, LED_DEPTH);
+    polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
+    converter conv(rect, polar);
     for (;;) {
       int size = rx.recv(cube.data(), cube.size());
       if (size != cube.size()) {

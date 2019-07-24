@@ -2,6 +2,7 @@
 
 #include <cstdint>  // uint8_t
 
+namespace sudare {
 template <typename T>
 class RGB_ {
   T r;
@@ -36,5 +37,6 @@ class RGB_ {
   T getB() const { return b; }
 };
 
-typedef RGB_<uint8_t> RGB;
+typedef RGB_<uint8_t> rgb;
 typedef RGB_<double> RGBd;
+}  // namespace sudare

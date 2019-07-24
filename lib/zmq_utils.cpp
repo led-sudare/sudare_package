@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 
+namespace sudare {
 namespace {
 void error(const char* msg, int err = zmq_errno()) {
   std::stringstream ss;
@@ -62,3 +63,4 @@ void zmq_client::send(const char* buf, int size) const {
   if (res < 0) error("zmq_send");
   std::cout << "zmq sent : " << res << "bytes" << std::endl;
 }
+}  // namespace sudare

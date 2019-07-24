@@ -5,6 +5,7 @@
 #include <iostream>
 #include "error.hpp"
 
+namespace sudare {
 void udp_server::close() {
   if (0 < m_fd && ::close(m_fd) < 0) error("close");
   m_fd = 0;
@@ -33,3 +34,4 @@ int udp_server::recv(char *buf, int size) const {
   if (res < 0 && errno != EAGAIN) error("recv");
   return res;
 }
+}  // namespace sudare

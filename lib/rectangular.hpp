@@ -4,8 +4,8 @@
 #include <vector>
 #include "rgb.hpp"
 
-class Rectangular {
-  std::vector<RGB> m;
+class rectangular {
+  std::vector<rgb> m;
   size_t m_w;
   size_t m_h;
   size_t m_d;
@@ -16,7 +16,7 @@ class Rectangular {
   }
   /** 座標アドレス */
   size_t address(int x, int y, int z) const {
-    if (!contains(x, y, z)) throw std::out_of_range("Rectangular::address");
+    if (!contains(x, y, z)) throw std::out_of_range("rectangular::address");
     return static_cast<size_t>(x + (y + z * m_h) * m_w);
   }
 
@@ -29,7 +29,7 @@ class Rectangular {
   }
 
  public:
-  Rectangular(size_t w, size_t h, size_t d) {
+  rectangular(size_t w, size_t h, size_t d) {
     m_w = w;
     m_h = h;
     m_d = d;
@@ -43,7 +43,7 @@ class Rectangular {
   size_t getD() const { return m_d; }
   /** 色設定 */
   void set(int x, int y, int z, int rgb) {
-    if (contains(x, y, z)) m[address(x, y, z)] = RGB(rgb);
+    if (contains(x, y, z)) m[address(x, y, z)] = rgb(rgb);
   }
   /** 3D LEDパケットからの一括入力 */
   void from3DLED(uint8_t const* p) {
@@ -55,19 +55,19 @@ class Rectangular {
           "size should be following values. W = 16, H = 32, D = 8");
     for (int x = 0; x < W; ++x)
       for (int y = 0; y < H; ++y)
-        for (int z = 0; z < D; ++z, p += 2) m[address(x, y, z)] = RGB(p);
+        for (int z = 0; z < D; ++z, p += 2) m[address(x, y, z)] = rgb(p);
   }
   /** 全座標クリア */
-  void clear() { std::fill(m.begin(), m.end(), RGB()); }
+  void clear() { std::fill(m.begin(), m.end(), rgb()); }
   /** ニアレストネイバー */
-  RGB getNN(double x, double y, double z) const {
+  rgb getNN(double x, double y, double z) const {
     int ax = static_cast<int>(std::round(x));
     int ay = static_cast<int>(std::round(y));
     int az = static_cast<int>(std::round(z));
     return m[address(ax, ay, az)];
   }
   /** バイリニア */
-  RGB getBL(double x, double y, double z) const {
+  rgb getBL(double x, double y, double z) const {
     // 点(x, y, z)を含む、1x1x1サイズの立方体を作る。
     int x0 = static_cast<int>(std::floor(x));
     int x1 = static_cast<int>(std::ceil(x));
@@ -89,7 +89,7 @@ class Rectangular {
     RGBd d1 = calc(c01, ry, c11);
     // 最後にZ方向に圧縮する
     RGBd res = calc(d0, z - z0, d1);
-    return RGB(static_cast<uint8_t>(res.getR()),
+    return rgb(static_cast<uint8_t>(res.getR()),
                static_cast<uint8_t>(res.getG()),
                static_cast<uint8_t>(res.getB()));
   }

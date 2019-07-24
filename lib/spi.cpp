@@ -7,7 +7,8 @@
 #include <unistd.h>  // close, usleep
 #endif               // ENABLE_SPI
 
-SPI::SPI(int clock) : m_clock(clock) {
+namespace sudare {
+spi::spi(int clock) : m_clock(clock) {
   std::cout << "SPI CLOCK : " << clock << "Hz" << std::endl;
 #ifdef ENABLE_SPI
   const char *dev = "/dev/spidev0.0";
@@ -17,13 +18,13 @@ SPI::SPI(int clock) : m_clock(clock) {
 #endif  // ENABLE_SPI
 }
 
-SPI::~SPI() {
+spi::~spi() {
 #ifdef ENABLE_SPI
   if (close(m_fd) < 0) error("close");
 #endif  // ENABLE_SPI
 }
 
-size_t SPI::write(const char *data, size_t size, int cs) const {
+size_t spi::write(const char *data, size_t size, int cs) const {
 #ifdef ENABLE_SPI
   spi_ioc_transfer msg[1] = {{0}};
   msg[0].tx_buf = (unsigned long)p;
@@ -41,3 +42,4 @@ size_t SPI::write(const char *data, size_t size, int cs) const {
 #endif  // ENABLE_SPI
   return static_cast<size_t>(res);
 }
+}  // namespace sudare
