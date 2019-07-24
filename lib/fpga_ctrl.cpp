@@ -2,18 +2,13 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <unistd.h>  // close, usleep
-#include <cstring>   // strerror
 #include <iostream>
-#include <sstream>  // std::stringstream, errno, std::runtime_error
-#ifdef ENABLE_SPI
-#include <linux/spi/spidev.h>
-#endif  // ENABLE_SPI
 
 namespace {
 const int hlen = 3;
 const int dlen = SUDARE_WIDTH * SUDARE_HEIGHT;
 const int cs = 0;
-const int angles = 360 / ANGLE_RESOLUTION;
+const int angles = SUDARE_ANGLES;
 }  // namespace
 
 fpga_ctrl::fpga_ctrl(uint8_t clock_MHz)

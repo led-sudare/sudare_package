@@ -1,7 +1,7 @@
 #include "sudare.h"
 #include <array>
-#include <memory>
 #include <iostream>
+#include <memory>
 #include <thread>
 #include "converter.hpp"
 #include "spi.h"
@@ -19,13 +19,13 @@ std::shared_ptr<SPI> s_spi;
 }  // namespace
 
 int InitSdk(int width, int height, int depth, uint8_t clock_MHz) {
-  try{
-  s_rect = std::make_shared<Rectangular>(width, height, depth);
-  s_polar = std::make_shared<Polar>(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT);
-  s_conv = std::make_shared<Converter>(*s_rect, *s_polar);
-  s_spi = std::make_shared<SPI>(10 * 1000 * 1000);
+  try {
+    s_rect = std::make_shared<Rectangular>(width, height, depth);
+    s_polar = std::make_shared<Polar>(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT);
+    s_conv = std::make_shared<Converter>(*s_rect, *s_polar);
+    s_spi = std::make_shared<SPI>(10 * 1000 * 1000);
     return 0;
-  }catch(std::exception const & e){
+  } catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;
     return 1;
   }
@@ -41,10 +41,11 @@ void Show() {
   for (uint8_t a = 0; a < POLAR_ANGLES; ++a) {
     std::array<uint8_t, dlen + 4> pkt{2, 0, 0};  // WR, AD0, AD1
     pkt.back() = a;
-    uint8_t const *begin = s_polar->data(a,0,0);
+    uint8_t const *begin = s_polar->data(a, 0, 0);
     uint8_t const *end = begin + dlen;
     std::copy(begin, end, pkt.data() + 3);
-    s_spi->write(reinterpret_cast<char*>(pkt.data()), pkt.size(), 0);  // BUF, LEN, CS
+    s_spi->write(reinterpret_cast<char *>(pkt.data()), pkt.size(),
+                 0);  // BUF, LEN, CS
   }
 }
 
@@ -67,6 +68,7 @@ void DrawAll(uint8_t red, uint8_t green, uint8_t blue) {
     uint8_t *p = pkt.data() + 3;
     for (int r = 1; r <= 15; ++r)
       for (int y = 0; y < 100; ++y, p += 2) rgb.to565(p);
-    s_spi->write(reinterpret_cast<char*>(pkt.data()), pkt.size(), 0);  // buf, len, cs
+    s_spi->write(reinterpret_cast<char *>(pkt.data()), pkt.size(),
+                 0);  // buf, len, cs
   }
 }

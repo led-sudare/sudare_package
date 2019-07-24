@@ -3,10 +3,10 @@
 #include <iostream>
 #include <sstream>
 #include "converter.hpp"
+#include "error.hpp"
 #include "fpga_ctrl.h"
 #include "udp_server.h"
 #include "zmq_utils.h"
-#include "error.hpp"
 
 #define LED_WIDTH 16
 #define LED_HEIGHT 32

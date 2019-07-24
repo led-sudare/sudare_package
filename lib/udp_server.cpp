@@ -3,7 +3,6 @@
 #include <unistd.h>     // close
 #include <cstring>      // strerror
 #include <iostream>
-#include <sstream>  // std::stringstream, errno, std::runtime_error
 #include "error.hpp"
 
 void udp_server::close() {

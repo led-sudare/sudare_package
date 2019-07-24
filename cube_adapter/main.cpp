@@ -18,9 +18,10 @@
 int main(int argc, const char *argv[]) {
   try {
     if (argc <= 2)
-      throw std::invalid_argument("You should input [MY PORT] [TARGET ex *:1234 or localhost:4567].");
+      throw std::invalid_argument(
+          "You should input [MY PORT] [TARGET ex *:1234 or localhost:4567].");
     const int my_port = atoi(argv[1]);
-    const char * target = argv[2];
+    const char *target = argv[2];
     std::cout << "MY PORT : " << my_port << "\nTARGET PORT: " << target
               << std::endl;
     udp_server rx(my_port);

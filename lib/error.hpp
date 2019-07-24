@@ -1,3 +1,5 @@
+#pragma once
+
 #include <sstream>
 
 inline void error(const char *msg, int err = errno) {
