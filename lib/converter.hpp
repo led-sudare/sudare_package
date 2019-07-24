@@ -3,6 +3,7 @@
 #include "polar.hpp"
 #include "rectangular.hpp"
 
+namespace sudare {
 class converter {
   rectangular const& m_rect;
   polar& m_polar;
@@ -38,3 +39,4 @@ class converter {
     }
   }
 };
+}  // namespace sudare

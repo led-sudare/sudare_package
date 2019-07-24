@@ -3,6 +3,7 @@
 #include <vector>
 #include "rgb.hpp"
 
+namespace sudare {
 class polar {
   int m_angles;
   int m_radius;
@@ -25,9 +26,9 @@ class polar {
         m_height(height),
         m(angles * radius * height * 2) {}
   void clear() { std::fill(m.begin(), m.end(), 0); }
-  void set(int a, int r, int h, int rgb) { set(a, r, h, rgb(rgb)); }
-  void set(int a, int r, int h, rgb rgb) {
-    if (contains(a, r, h)) rgb.to565(data(a, r, h));
+  void set(int a, int r, int h, int color) { set(a, r, h, rgb(color)); }
+  void set(int a, int r, int h, rgb color) {
+    if (contains(a, r, h)) color.to565(data(a, r, h));
   }
   uint8_t* data(int a, int r, int h) { return m.data() + index(a, r, h); }
   uint8_t const* data(int a, int r, int h) const {
@@ -40,3 +41,4 @@ class polar {
   int radius() const { return m_radius; }
   int height() const { return m_height; }
 };
+}  // namespace sudare

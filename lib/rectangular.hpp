@@ -4,6 +4,7 @@
 #include <vector>
 #include "rgb.hpp"
 
+namespace sudare {
 class rectangular {
   std::vector<rgb> m;
   size_t m_w;
@@ -22,8 +23,8 @@ class rectangular {
 
   /** 2点間の中間色を得る */
   template <typename T>
-  static RGBd calc(RGB_<T> const& c0, double r, RGB_<T> const& c1) {
-    return RGBd(c0.getR() * (1 - r) + c1.getR() * r,
+  static rgbd calc(rgb_<T> const& c0, double r, rgb_<T> const& c1) {
+    return rgbd(c0.getR() * (1 - r) + c1.getR() * r,
                 c0.getG() * (1 - r) + c1.getG() * r,
                 c0.getB() * (1 - r) + c1.getB() * r);
   }
@@ -79,18 +80,19 @@ class rectangular {
     auto rgb = [this](int x, int y, int z) { return m[address(x, y, z)]; };
     // 立方体の8点をX方向に圧縮して4点にする
     double rx = x - x0;
-    RGBd c00 = calc(rgb(x0, y0, z0), rx, rgb(x1, y0, z0));
-    RGBd c01 = calc(rgb(x0, y0, z1), rx, rgb(x1, y0, z1));
-    RGBd c10 = calc(rgb(x0, y1, z0), rx, rgb(x1, y1, z0));
-    RGBd c11 = calc(rgb(x0, y1, z1), rx, rgb(x1, y1, z1));
+    rgbd c00 = calc(rgb(x0, y0, z0), rx, rgb(x1, y0, z0));
+    rgbd c01 = calc(rgb(x0, y0, z1), rx, rgb(x1, y0, z1));
+    rgbd c10 = calc(rgb(x0, y1, z0), rx, rgb(x1, y1, z0));
+    rgbd c11 = calc(rgb(x0, y1, z1), rx, rgb(x1, y1, z1));
     // 同様にY方向に圧縮して2点にする
     double ry = y - y0;
-    RGBd d0 = calc(c00, ry, c10);
-    RGBd d1 = calc(c01, ry, c11);
+    rgbd d0 = calc(c00, ry, c10);
+    rgbd d1 = calc(c01, ry, c11);
     // 最後にZ方向に圧縮する
-    RGBd res = calc(d0, z - z0, d1);
+    rgbd res = calc(d0, z - z0, d1);
     return rgb(static_cast<uint8_t>(res.getR()),
                static_cast<uint8_t>(res.getG()),
                static_cast<uint8_t>(res.getB()));
   }
 };
+}  // namespace sudare

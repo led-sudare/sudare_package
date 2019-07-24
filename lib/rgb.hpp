@@ -4,7 +4,7 @@
 
 namespace sudare {
 template <typename T>
-class RGB_ {
+class rgb_ {
   T r;
   T g;
   T b;
@@ -19,13 +19,13 @@ class RGB_ {
   }
 
  public:
-  RGB_() : r(0), g(0), b(0) {}
-  RGB_(T red, T green, T blue) : r(red), g(green), b(blue) {}
-  explicit RGB_(int rgb)
+  rgb_() : r(0), g(0), b(0) {}
+  rgb_(T red, T green, T blue) : r(red), g(green), b(blue) {}
+  explicit rgb_(int rgb)
       : r((rgb & 0xFF0000) >> 16),
         g((rgb & 0x00FF00) >> 8),
         b((rgb & 0x0000FF) >> 0) {}
-  explicit RGB_(uint8_t const* p565)
+  explicit rgb_(uint8_t const* p565)
       : r(p565[0] & 0xF8),
         g(((p565[0] & 0x07) << 5) + ((p565[1] & 0xE0) >> 3)),
         b((p565[1] & 0x1F) << 3) {}
@@ -37,6 +37,6 @@ class RGB_ {
   T getB() const { return b; }
 };
 
-typedef RGB_<uint8_t> rgb;
-typedef RGB_<double> RGBd;
+typedef rgb_<uint8_t> rgb;
+typedef rgb_<double> rgbd;
 }  // namespace sudare
