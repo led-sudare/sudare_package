@@ -29,7 +29,7 @@ int main(int argc, const char *argv[]) {
     sudare::zmq_client tx(zmq_init.context(), target);
     sudare::rectangular rect(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH);
     sudare::polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
-    sudare::converter convert(rect, polar);
+    sudare::bilinear convert(rect, polar);
     std::array<char, CUBE_PKT_SIZE> cube;
     for (;;) {
       int size = rx.recv(cube.data(), cube.size());
