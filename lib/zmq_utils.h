@@ -26,7 +26,7 @@ class zmq_client {
  public:
   zmq_client(void* context, const char* dst);
   virtual ~zmq_client();
-  void send(const char* buf, int size) const;
+  int send(const char* buf, int size) const;
   void* socket() const { return m_socket; }
 };
 }  // namespace sudare

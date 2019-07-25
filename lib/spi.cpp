@@ -40,6 +40,7 @@ size_t spi::write(const char *data, size_t size, int cs) const {
   usleep(ns);  // SPIの通信時間だけ待機（シミュレーション）
   int res = size;
 #endif  // ENABLE_SPI
+  std::cout << "write spi : " << res << "bytes" << std::endl;
   return static_cast<size_t>(res);
 }
 }  // namespace sudare

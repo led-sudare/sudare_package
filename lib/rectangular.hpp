@@ -17,7 +17,11 @@ class rectangular {
   }
   /** 座標アドレス */
   size_t address(int x, int y, int z) const {
-    if (!contains(x, y, z)) throw std::out_of_range("rectangular::address");
+    if (!contains(x, y, z)) {
+      std::cerr << "invalid address " << x << ", " << y << ", " << z
+                << std::endl;
+      throw std::out_of_range("rectangular::address");
+    }
     return static_cast<size_t>(x + (y + z * m_h) * m_w);
   }
 

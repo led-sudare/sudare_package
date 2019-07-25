@@ -58,9 +58,10 @@ zmq_client::~zmq_client() {
   if (zmq_close(m_socket) < 0) error("zmq_close");
 }
 
-void zmq_client::send(const char* buf, int size) const {
+int zmq_client::send(const char* buf, int size) const {
   int res = zmq_send(m_socket, buf, size, 0);
   if (res < 0) error("zmq_send");
   std::cout << "zmq sent : " << res << "bytes" << std::endl;
+  return res;
 }
 }  // namespace sudare

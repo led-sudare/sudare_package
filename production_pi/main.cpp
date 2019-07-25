@@ -4,7 +4,7 @@
 #include <sstream>
 #include "converter.hpp"
 #include "error.hpp"
-#include "fpga_ctrl.h"
+#include "publisher.hpp"
 #include "udp_server.h"
 #include "zmq_utils.h"
 
@@ -12,6 +12,9 @@
 #define CUBE_HEIGHT 32
 #define CUBE_DEPTH 8
 #define CUBE_PKT_SIZE CUBE_WIDTH *CUBE_HEIGHT *CUBE_DEPTH * 2
+#define SUDARE_ANGLES 360 / 6
+#define SUDARE_WIDTH 30
+#define SUDARE_HEIGHT 100
 
 int main(int argc, const char *argv[]) {
   try {
@@ -20,7 +23,7 @@ int main(int argc, const char *argv[]) {
     sudare::zmq_initializer zmq_init;
     sudare::zmq_server zmq(zmq_init.context(), atoi(argv[1]));
     sudare::udp_server udp(atoi(argv[2]));
-    sudare::fpga_ctrl fpga(atoi(argv[3]));
+    sudare::spi_publisher publisher(atoi(argv[3]) * 1000 * 1000);
     zmq_pollitem_t items[] = {{zmq.socket(), 0, ZMQ_POLLIN, 0},
                               {0, udp.fd(), ZMQ_POLLIN, 0}};
     std::array<char, CUBE_PKT_SIZE> cube;
@@ -34,7 +37,7 @@ int main(int argc, const char *argv[]) {
             zmq.recv(reinterpret_cast<char *>(polar.data()), polar.size());
         printf("%08d ZMQ Packet size : %d\n", ++n, size);
         if (size == polar.size())
-          fpga.write(reinterpret_cast<char *>(polar.data()));
+          publisher(reinterpret_cast<char *>(polar.data()), polar.size());
       }
       if (items[1].revents & ZMQ_POLLIN) {
         int size = 0;
@@ -47,7 +50,7 @@ int main(int argc, const char *argv[]) {
         if (size == cube.size()) {
           rect.from3DLED(reinterpret_cast<uint8_t *>(cube.data()));
           convert();
-          fpga.write(reinterpret_cast<char *>(polar.data()));
+          publisher(reinterpret_cast<char *>(polar.data()), polar.size());
         }
       }
     }
