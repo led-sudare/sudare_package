@@ -12,9 +12,10 @@ class converter {
  public:
   converter(rectangular const& rect, polar& polar)
       : m_rect(rect), m_polar(polar) {}
+  virtual ~converter() {}
   virtual void operator()() = 0;
 };
-class bilinear : converter {
+class bilinear : public converter {
   std::vector<double> m_sin;
   std::vector<double> m_cos;
 
@@ -27,6 +28,7 @@ class bilinear : converter {
       m_cos[i] = std::cos(theta);
     }
   }
+  ~bilinear() {}
   void operator()() {
     const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
     const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);
@@ -44,7 +46,7 @@ class bilinear : converter {
     }
   }
 };
-class nearest_neighbor : converter {
+class nearest_neighbor : public converter {
   std::vector<double> m_sin;
   std::vector<double> m_cos;
 
@@ -57,6 +59,7 @@ class nearest_neighbor : converter {
       m_cos[i] = std::cos(theta);
     }
   }
+  ~nearest_neighbor() {}
   void operator()() {
     const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
     const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);
