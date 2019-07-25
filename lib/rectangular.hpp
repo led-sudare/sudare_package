@@ -51,7 +51,7 @@ class rectangular {
     if (contains(x, y, z)) m[address(x, y, z)] = rgb(color);
   }
   /** 3D LEDパケットからの一括入力 */
-  void from3DLED(uint8_t const* p) {
+  void set_from_3d_led_pkt(uint8_t const* p) {
     const int W = 16;
     const int H = 32;
     const int D = 8;

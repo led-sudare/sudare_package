@@ -48,7 +48,7 @@ int main(int argc, const char *argv[]) {
         }
         printf("%08d UDP Packet size : %d\n", ++n, size);
         if (size == cube.size()) {
-          rect.from3DLED(reinterpret_cast<uint8_t *>(cube.data()));
+          rect.set_from_3d_led_pkt(reinterpret_cast<uint8_t *>(cube.data()));
           convert();
           publisher(reinterpret_cast<char *>(polar.data()), polar.size());
         }
