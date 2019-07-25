@@ -15,12 +15,12 @@ class converter {
   virtual ~converter() {}
   virtual void operator()() = 0;
 };
-class bilinear : public converter {
+class bilinear_converter : public converter {
   std::vector<double> m_sin;
   std::vector<double> m_cos;
 
  public:
-  bilinear(rectangular const& rect, polar& polar)
+  bilinear_converter(rectangular const& rect, polar& polar)
       : converter(rect, polar), m_sin(polar.angles()), m_cos(polar.angles()) {
     for (size_t i = 0; i < m_sin.size(); ++i) {
       double theta = M_PI / 180 * i * (360 / polar.angles());
@@ -28,7 +28,7 @@ class bilinear : public converter {
       m_cos[i] = std::cos(theta);
     }
   }
-  ~bilinear() {}
+  ~bilinear_converter() {}
   void operator()() {
     const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
     const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);
@@ -46,12 +46,12 @@ class bilinear : public converter {
     }
   }
 };
-class nearest_neighbor : public converter {
+class nearest_neighbor_converter : public converter {
   std::vector<double> m_sin;
   std::vector<double> m_cos;
 
  public:
-  nearest_neighbor(rectangular const& rect, polar& polar)
+  nearest_neighbor_converter(rectangular const& rect, polar& polar)
       : converter(rect, polar), m_sin(polar.angles()), m_cos(polar.angles()) {
     for (size_t i = 0; i < m_sin.size(); ++i) {
       double theta = M_PI / 180 * i * (360 / polar.angles());
@@ -59,7 +59,7 @@ class nearest_neighbor : public converter {
       m_cos[i] = std::cos(theta);
     }
   }
-  ~nearest_neighbor() {}
+  ~nearest_neighbor_converter() {}
   void operator()() {
     const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
     const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);

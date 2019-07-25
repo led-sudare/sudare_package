@@ -29,7 +29,7 @@ int main(int argc, const char *argv[]) {
     std::array<char, CUBE_PKT_SIZE> cube;
     sudare::rectangular rect(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH);
     sudare::polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
-    sudare::bilinear convert(rect, polar);
+    sudare::bilinear_converter convert(rect, polar);
     for (int n = 0;;) {
       if (zmq_poll(items, 2, -1) < 0) sudare::error("zmq_poll");
       if (items[0].revents & ZMQ_POLLIN) {

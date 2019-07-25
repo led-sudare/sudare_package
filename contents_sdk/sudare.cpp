@@ -27,7 +27,7 @@ class Sudare {
   enum mode_t { rectangular_mode = 0, polar_mode = 1 } m_mode;
   sudare::rectangular m_rect;
   sudare::polar m_polar;
-  sudare::bilinear m_conv;
+  sudare::bilinear_converter m_conv;
   sudare::publisher& m_pub;
 
  public:
