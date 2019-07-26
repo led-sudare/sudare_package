@@ -46,6 +46,8 @@ class rectangular {
   void set(int x, int y, int z, int color) {
     if (contains(x, y, z)) m[index(x, y, z)] = rgb(color);
   }
+  /** 色取得 */
+  rgb get(int x, int y, int z) const { return m[index(x, y, z)]; }
   /** 3D LEDパケットからの一括入力 */
   void set_from_3d_led_pkt(char const* p) {
     const int W = 16;
@@ -76,14 +78,12 @@ class rectangular {
     int y1 = static_cast<int>(std::ceil(y));
     int z0 = static_cast<int>(std::floor(z));
     int z1 = static_cast<int>(std::ceil(z));
-    // 指定位置の色取得
-    auto rgb = [this](int x, int y, int z) { return m[index(x, y, z)]; };
     // 立方体の8点をX方向に圧縮して4点にする
     double rx = x - x0;
-    rgbd c00 = calc(rgb(x0, y0, z0), rx, rgb(x1, y0, z0));
-    rgbd c01 = calc(rgb(x0, y0, z1), rx, rgb(x1, y0, z1));
-    rgbd c10 = calc(rgb(x0, y1, z0), rx, rgb(x1, y1, z0));
-    rgbd c11 = calc(rgb(x0, y1, z1), rx, rgb(x1, y1, z1));
+    rgbd c00 = calc(get(x0, y0, z0), rx, get(x1, y0, z0));
+    rgbd c01 = calc(get(x0, y0, z1), rx, get(x1, y0, z1));
+    rgbd c10 = calc(get(x0, y1, z0), rx, get(x1, y1, z0));
+    rgbd c11 = calc(get(x0, y1, z1), rx, get(x1, y1, z1));
     // 同様にY方向に圧縮して2点にする
     double ry = y - y0;
     rgbd d0 = calc(c00, ry, c10);
