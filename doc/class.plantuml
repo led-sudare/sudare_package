@@ -1,0 +1,57 @@
+@startuml
+title sudare package
+
+class rectangular {
+  - width: int
+  - height: int
+  - depth: int
+  - m: vector<char>
+
+  + clear()
+  + set(int x, int y, int z, rgb color)
+  + getNN(int x, int y, int z)
+  + getBL(int x, int y, int z)
+}
+
+class polar {
+  - angles: int
+  - radius: int
+  - height: int
+  - m: vector<char>
+
+  + clear()
+  + set(int a, int r, int h, rgb color)
+  + data(int a, int r, int h)
+}
+
+class converter {
+  + operator(rectangular, polar)
+}
+class bilinear_converter
+class nearest_neighbor_converter
+bilinear_converter --|> converter
+nearest_neighbor_converter --|> converter
+
+class publisher {
+  + operator(char*, size_t)
+}
+class spi_publisher
+class zmq_publisher
+spi_publisher --|> publisher
+zmq_publisher --|> publisher
+
+class controller {
+  - conv: converter
+  - pub: publisher
+  - rect: rectangular
+  - pol: polar
+
+  + send()
+}
+
+controller -l- "1" converter
+controller -r- "1" publisher
+controller -d- "1" polar
+controller -d- "1" rectangular
+
+@enduml
