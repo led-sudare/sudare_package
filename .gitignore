@@ -10,3 +10,5 @@
 !*.service
 !*.sh
 !*.plantuml
+!*.rb
+!*.py
