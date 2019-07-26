@@ -26,11 +26,19 @@ class spi_publisher : public publisher {
  public:
   explicit spi_publisher(int clock) : m_spi(clock) {}
   int operator()(const char* data, size_t size) {
+    const int angles = 60;
+    const int dlen = 3000;
+    if (size != angles * dlen) {
+      std::cerr << "invalid size : " << size << std::endl;
+      throw std::invalid_argument("spi_publisher::operator()");
+    }
     int total = 0;
-    for (int a = 0; a < 60; ++a) {
-      std::array<char, 3004> pkt = {2, 0, 0};  // WRITE, AD0, AD1
+    for (int a = 0; a < angles; ++a) {
+      std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
       pkt.back() = static_cast<char>(a);
-      std::copy(data, data + size, pkt.data() + 3);
+      const char* begin = data + a * dlen;
+      const char* end = begin + dlen;
+      std::copy(begin, end, pkt.data() + 3);
       total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
     }
     return total;
