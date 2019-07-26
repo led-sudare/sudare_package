@@ -40,7 +40,7 @@ int main(int argc, const char *argv[]) {
       }
       rect.set_from_3d_led_pkt(cube.data());
       convert();
-      tx.send(reinterpret_cast<char *>(polar.data()), polar.size());
+      tx.send(polar.data(), polar.size());
     }
   } catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;

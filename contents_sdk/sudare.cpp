@@ -64,7 +64,7 @@ class Sudare {
       m_conv();
     }
     TimeMeter t("publish");
-    m_pub(reinterpret_cast<const char*>(m_polar.data()), m_polar.size());
+    m_pub(m_polar.data(), m_polar.size());
   }
   void sleep(int ms) {
     std::chrono::time_point now = std::chrono::system_clock::now();
