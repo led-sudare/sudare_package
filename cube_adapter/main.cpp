@@ -38,7 +38,7 @@ int main(int argc, const char *argv[]) {
                   << std::endl;
         continue;
       }
-      rect.set_from_3d_led_pkt(reinterpret_cast<uint8_t *>(cube.data()));
+      rect.set_from_3d_led_pkt(cube.data());
       convert();
       tx.send(reinterpret_cast<char *>(polar.data()), polar.size());
     }

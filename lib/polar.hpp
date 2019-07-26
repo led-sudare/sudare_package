@@ -8,8 +8,12 @@ class polar {
   int m_angles;
   int m_radius;
   int m_height;
-  std::vector<uint8_t> m;
+  std::vector<char> m;
   int index(int a, int r, int h) const {
+    if (!contains(a, r, h)) {
+      std::cerr << "invalid index " << a << ", " << r << ", " << h << std::endl;
+      throw std::out_of_range("polar::index");
+    }
     a %= m_angles;
     return ((a * m_radius + r) * m_height + h) * 2;
   }
@@ -30,12 +34,12 @@ class polar {
   void set(int a, int r, int h, rgb color) {
     if (contains(a, r, h)) color.to565(data(a, r, h));
   }
-  uint8_t* data(int a, int r, int h) { return m.data() + index(a, r, h); }
-  uint8_t const* data(int a, int r, int h) const {
+  char* data(int a, int r, int h) { return m.data() + index(a, r, h); }
+  char const* data(int a, int r, int h) const {
     return m.data() + index(a, r, h);
   }
-  uint8_t const* data() const { return m.data(); }
-  uint8_t* data() { return m.data(); }
+  char const* data() const { return m.data(); }
+  char* data() { return m.data(); }
   size_t size() const { return m.size(); }
   int angles() const { return m_angles; }
   int radius() const { return m_radius; }

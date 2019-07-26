@@ -33,7 +33,7 @@ class bilinear_converter : public converter {
     const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
     const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);
     const double ry = (m_rect.getH() - 1.0) / (m_polar.height() - 1);
-    for (uint8_t a = 0; a < m_polar.angles(); ++a) {
+    for (int a = 0; a < m_polar.angles(); ++a) {
       for (int r = 1; r <= m_polar.radius(); ++r) {
         double ax = (m_polar.radius() + m_cos[a] * r) * rx;
         double az = (m_polar.radius() + m_sin[a] * r) * rz;
@@ -64,7 +64,7 @@ class nearest_neighbor_converter : public converter {
     const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
     const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);
     const double ry = (m_rect.getH() - 1.0) / (m_polar.height() - 1);
-    for (uint8_t a = 0; a < m_polar.angles(); ++a) {
+    for (int a = 0; a < m_polar.angles(); ++a) {
       for (int r = 1; r <= m_polar.radius(); ++r) {
         double ax = (m_polar.radius() + m_cos[a] * r) * rx;
         double az = (m_polar.radius() + m_sin[a] * r) * rz;

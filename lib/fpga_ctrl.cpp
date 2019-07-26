@@ -12,7 +12,7 @@ const int cs = 0;
 const int angles = SUDARE_ANGLES;
 }  // namespace
 
-fpga_ctrl::fpga_ctrl(uint8_t clock_MHz)
+fpga_ctrl::fpga_ctrl(int clock_MHz)
     : m_total_sent(0), m_sent_count(0), m_spi(clock_MHz * 1000 * 1000) {
   std::fill(m_cache.begin(), m_cache.end(), 0);
 }

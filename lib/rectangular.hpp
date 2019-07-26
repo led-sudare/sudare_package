@@ -7,22 +7,19 @@
 namespace sudare {
 class rectangular {
   std::vector<rgb> m;
-  size_t m_w;
-  size_t m_h;
-  size_t m_d;
+  int m_w;
+  int m_h;
+  int m_d;
   /** 座標が内部にある判定 */
   bool contains(int x, int y, int z) const {
     return 0 <= x && x < static_cast<int>(m_w) && 0 <= y &&
            y < static_cast<int>(m_h) && 0 <= z && z < static_cast<int>(m_d);
   }
   /** 座標アドレス */
-  size_t address(int x, int y, int z) const {
-    if (!contains(x, y, z)) {
-      std::cerr << "invalid address " << x << ", " << y << ", " << z
-                << std::endl;
-      throw std::out_of_range("rectangular::address");
-    }
-    return static_cast<size_t>(x + (y + z * m_h) * m_w);
+  int index(int x, int y, int z) const {
+    if (contains(x, y, z)) return x + (y + z * m_h) * m_w;
+    std::cerr << "invalid index " << x << ", " << y << ", " << z << std::endl;
+    throw std::out_of_range("rectangular::index");
   }
 
   /** 2点間の中間色を得る */
@@ -34,24 +31,24 @@ class rectangular {
   }
 
  public:
-  rectangular(size_t w, size_t h, size_t d) {
+  rectangular(int w, int h, int d) {
     m_w = w;
     m_h = h;
     m_d = d;
     m.resize(m_w * m_h * m_d);
   }
   /** 幅取得 */
-  size_t getW() const { return m_w; }
+  int getW() const { return m_w; }
   /** 高さ取得 */
-  size_t getH() const { return m_h; }
+  int getH() const { return m_h; }
   /** 奥行き取得 */
-  size_t getD() const { return m_d; }
+  int getD() const { return m_d; }
   /** 色設定 */
   void set(int x, int y, int z, int color) {
-    if (contains(x, y, z)) m[address(x, y, z)] = rgb(color);
+    if (contains(x, y, z)) m[index(x, y, z)] = rgb(color);
   }
   /** 3D LEDパケットからの一括入力 */
-  void set_from_3d_led_pkt(uint8_t const* p) {
+  void set_from_3d_led_pkt(char const* p) {
     const int W = 16;
     const int H = 32;
     const int D = 8;
@@ -60,7 +57,7 @@ class rectangular {
           "size should be following values. W = 16, H = 32, D = 8");
     for (int x = 0; x < W; ++x)
       for (int y = 0; y < H; ++y)
-        for (int z = 0; z < D; ++z, p += 2) m[address(x, y, z)] = rgb(p);
+        for (int z = 0; z < D; ++z, p += 2) m[index(x, y, z)] = rgb(p);
   }
   /** 全座標クリア */
   void clear() { std::fill(m.begin(), m.end(), rgb()); }
@@ -69,7 +66,7 @@ class rectangular {
     int ax = static_cast<int>(std::round(x));
     int ay = static_cast<int>(std::round(y));
     int az = static_cast<int>(std::round(z));
-    return m[address(ax, ay, az)];
+    return m[index(ax, ay, az)];
   }
   /** バイリニア */
   rgb getBL(double x, double y, double z) const {
@@ -81,7 +78,7 @@ class rectangular {
     int z0 = static_cast<int>(std::floor(z));
     int z1 = static_cast<int>(std::ceil(z));
     // 指定位置の色取得
-    auto rgb = [this](int x, int y, int z) { return m[address(x, y, z)]; };
+    auto rgb = [this](int x, int y, int z) { return m[index(x, y, z)]; };
     // 立方体の8点をX方向に圧縮して4点にする
     double rx = x - x0;
     rgbd c00 = calc(rgb(x0, y0, z0), rx, rgb(x1, y0, z0));

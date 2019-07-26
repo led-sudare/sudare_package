@@ -18,7 +18,7 @@ std::shared_ptr<sudare::converter> s_conv;
 std::shared_ptr<sudare::spi> s_spi;
 }  // namespace
 
-int InitSdk(int width, int height, int depth, uint8_t clock_MHz) {
+int InitSdk(int width, int height, int depth, int clock_MHz) {
   try {
     s_rect = std::make_shared<sudare::rectangular>(width, height, depth);
     s_polar = std::make_shared<sudare::polar>(POLAR_ANGLES, POLAR_RADIUS,
@@ -39,13 +39,13 @@ void Clear() { s_rect->clear(); }
 void Show() {
   (*s_conv)();
   const int dlen = 3000;
-  for (uint8_t a = 0; a < POLAR_ANGLES; ++a) {
-    std::array<uint8_t, dlen + 4> pkt{2, 0, 0};  // WR, AD0, AD1
+  for (int a = 0; a < POLAR_ANGLES; ++a) {
+    std::array<char, dlen + 4> pkt{2, 0, 0};  // WR, AD0, AD1
     pkt.back() = a;
-    uint8_t const *begin = s_polar->data(a, 0, 0);
-    uint8_t const *end = begin + dlen;
+    char const *begin = s_polar->data(a, 0, 0);
+    char const *end = begin + dlen;
     std::copy(begin, end, pkt.data() + 3);
-    s_spi->write(reinterpret_cast<char *>(pkt.data()), pkt.size(),
+    s_spi->write(pkt.data(), pkt.size(),
                  0);  // BUF, LEN, CS
   }
 }
@@ -63,13 +63,12 @@ void Wait(int ms) {
 
 void DrawAll(uint8_t red, uint8_t green, uint8_t blue) {
   sudare::rgb color(red, green, blue);
-  for (uint8_t a = 0; a < 60; ++a) {
-    std::array<uint8_t, 3004> pkt{2, 0, 0};  // WR, AD0, AD1
+  for (char a = 0; a < 60; ++a) {
+    std::array<char, 3004> pkt{2, 0, 0};  // WR, AD0, AD1
     pkt.back() = a;
-    uint8_t *p = pkt.data() + 3;
+    char *p = pkt.data() + 3;
     for (int r = 1; r <= 15; ++r)
       for (int y = 0; y < 100; ++y, p += 2) color.to565(p);
-    s_spi->write(reinterpret_cast<char *>(pkt.data()), pkt.size(),
-                 0);  // buf, len, cs
+    s_spi->write(pkt.data(), pkt.size(), 0);  // buf, len, cs
   }
 }

@@ -77,13 +77,15 @@ class Sudare {
     m_last_sleep_time = std::chrono::system_clock::now();
   }
 };
+sudare::zmq_initializer s_zmq_init;
 std::shared_ptr<sudare::publisher> s_sender;
 std::shared_ptr<Sudare> s;
 }  // namespace
 
 int sudare_init_sdk(const char* dst) {
   try {
-    s_sender = std::make_shared<sudare::zmq_publisher>(dst);
+    void* context = s_zmq_init.context();
+    s_sender = std::make_shared<sudare::zmq_publisher>(context, dst);
     s = std::make_shared<Sudare>(*s_sender);
     return 0;
   } catch (std::exception const& e) {

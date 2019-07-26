@@ -25,7 +25,7 @@ class fpga_ctrl {
   void write2(const char *p) const;
 
  public:
-  explicit fpga_ctrl(uint8_t clock_MHz);
+  explicit fpga_ctrl(int clock_MHz);
   virtual ~fpga_ctrl();
   /**@param[in] p SUDARE PACKET begin address*/
   void write(const char *p) const { write2(p); }

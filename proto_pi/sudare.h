@@ -9,7 +9,7 @@
  @param[in] depth
  @param[in] clock_MHz
  */
-int InitSdk(int width, int height, int depth, uint8_t clock_MHz);
+int InitSdk(int width, int height, int depth, int clock_MHz);
 
 /**
  Specify the color of each LED.

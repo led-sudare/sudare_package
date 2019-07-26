@@ -11,11 +11,10 @@ class publisher {
   virtual int operator()(const char* data, size_t size) = 0;
 };
 class zmq_publisher : public publisher {
-  sudare::zmq_initializer m_init;
   sudare::zmq_client m_client;
 
  public:
-  zmq_publisher(const char* dst) : m_init(), m_client(m_init.context(), dst) {}
+  zmq_publisher(void* context, const char* dst) : m_client(context, dst) {}
   ~zmq_publisher() {}
   int operator()(const char* data, size_t size) {
     return m_client.send(data, size);
