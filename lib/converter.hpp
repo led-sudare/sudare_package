@@ -15,6 +15,8 @@ class converter {
   virtual ~converter() {}
   virtual void operator()() = 0;
 };
+
+/** 直交座標から極座標へ変換する。補間はバイリニア。 */
 class bilinear_converter : public converter {
   std::vector<double> m_sin;
   std::vector<double> m_cos;
@@ -46,6 +48,8 @@ class bilinear_converter : public converter {
     }
   }
 };
+
+/** 直交座標から極座標へ変換する。補間はニアレストネイバー。 */
 class nearest_neighbor_converter : public converter {
   std::vector<double> m_sin;
   std::vector<double> m_cos;

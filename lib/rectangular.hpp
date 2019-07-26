@@ -12,10 +12,9 @@ class rectangular {
   int m_d;
   /** 座標が内部にある判定 */
   bool contains(int x, int y, int z) const {
-    return 0 <= x && x < static_cast<int>(m_w) && 0 <= y &&
-           y < static_cast<int>(m_h) && 0 <= z && z < static_cast<int>(m_d);
+    return 0 <= x && x < m_w && 0 <= y && y < m_h && 0 <= z && z < m_d;
   }
-  /** 座標アドレス */
+  /** 座標インデックス */
   int index(int x, int y, int z) const {
     if (contains(x, y, z)) return x + (y + z * m_h) * m_w;
     std::cerr << "invalid index " << x << ", " << y << ", " << z << std::endl;

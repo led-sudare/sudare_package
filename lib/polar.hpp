@@ -9,18 +9,17 @@ class polar {
   int m_radius;
   int m_height;
   std::vector<char> m;
+  /** 座標インデックス */
   int index(int a, int r, int h) const {
-    if (!contains(a, r, h)) {
-      std::cerr << "invalid index " << a << ", " << r << ", " << h << std::endl;
-      throw std::out_of_range("polar::index");
-    }
     a %= m_angles;
-    return ((a * m_radius + r) * m_height + h) * 2;
+    if (contains(a, r, h)) return ((a * m_radius + r) * m_height + h) * 2;
+    std::cerr << "invalid index " << a << ", " << r << ", " << h << std::endl;
+    throw std::out_of_range("polar::index");
   }
+  /** 座標が内部にある判定 */
   bool contains(int a, int r, int h) const {
-    a %= m_angles;
-    return 0 <= a && a < m_angles && 0 <= r && r < m_radius && 0 <= h &&
-           h < m_height;
+    // aは何周してもよいので確認しない
+    return 0 <= r && r < m_radius && 0 <= h && h < m_height;
   }
 
  public:
