@@ -2,9 +2,9 @@
 #include <array>
 #include <iostream>
 #include <sstream>
-#include "converter.hpp"
+#include "converter.h"
 #include "error.hpp"
-#include "publisher.hpp"
+#include "publisher.h"
 #include "udp_server.h"
 #include "zmq_utils.h"
 

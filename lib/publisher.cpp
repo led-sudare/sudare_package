@@ -1,49 +1,34 @@
-#pragma once
-
+#include "publisher.h"
 #include <array>
-#include "spi.h"
-#include "zmq_utils.h"
+#include <iostream>
 
 namespace sudare {
-class publisher {
- public:
-  virtual ~publisher() {}
-  virtual int operator()(const char* data, size_t size) = 0;
-};
-class zmq_publisher : public publisher {
-  sudare::zmq_client m_client;
+zmq_publisher::zmq_publisher(void* context, const char* dst)
+    : m_client(context, dst) {}
 
- public:
-  zmq_publisher(void* context, const char* dst) : m_client(context, dst) {}
-  ~zmq_publisher() {}
-  int operator()(const char* data, size_t size) {
-    return m_client.send(data, size);
-  }
-};
-class spi_publisher : public publisher {
-  sudare::spi m_spi;
+int zmq_publisher::operator()(const char* data, size_t size) {
+  return m_client.send(data, size);
+}
 
- public:
-  explicit spi_publisher(int clock) : m_spi(clock) {}
-  int operator()(const char* data, size_t size) {
-    const int angles = 60;
-    const int dlen = 3000;
-    if (size != angles * dlen) {
-      std::cerr << "invalid size : " << size << std::endl;
-      throw std::invalid_argument("spi_publisher::operator()");
-    }
-    int total = 0;
-    for (int a = 0; a < angles; ++a) {
-      std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
-      pkt.back() = static_cast<char>(a);
-      const char* begin = data + a * dlen;
-      const char* end = begin + dlen;
-      std::copy(begin, end, pkt.data() + 3);
-      total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
-    }
-    return total;
+spi_publisher::spi_publisher(int clock) : m_spi(clock) {}
+int spi_publisher::operator()(const char* data, size_t size) {
+  const int angles = 60;
+  const int dlen = 3000;
+  if (size != angles * dlen) {
+    std::cerr << "invalid size : " << size << std::endl;
+    throw std::invalid_argument("spi_publisher::operator()");
   }
-};
+  int total = 0;
+  for (int a = 0; a < angles; ++a) {
+    std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
+    pkt.back() = static_cast<char>(a);
+    const char* begin = data + a * dlen;
+    const char* end = begin + dlen;
+    std::copy(begin, end, pkt.data() + 3);
+    total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
+  }
+  return total;
+}
 }  // namespace sudare
 
 /* SPI通信量を間引く処理。FPGAの都合で使用不可となったが将来的に復活するかもしれないし、何より作るのが大変だったからとっておく。

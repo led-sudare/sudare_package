@@ -3,8 +3,8 @@
 #include <iostream>
 #include <memory>  // std::shared_ptr
 #include <thread>  // std::this_thread::sleep_for
-#include "converter.hpp"
-#include "publisher.hpp"
+#include "converter.h"
+#include "publisher.h"
 
 namespace {
 class TimeMeter {

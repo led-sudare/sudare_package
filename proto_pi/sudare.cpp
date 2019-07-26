@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <thread>
-#include "converter.hpp"
+#include "converter.h"
 #include "spi.h"
 
 #define POLAR_HEIGHT 100
