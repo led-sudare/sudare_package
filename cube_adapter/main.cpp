@@ -24,7 +24,7 @@ int main(int argc, const char *argv[]) {
     const char *target = argv[2];
     std::cout << "MY PORT : " << my_port << "\nTARGET PORT: " << target
               << std::endl;
-    sudare::udp_server rx(my_port);
+    sudare::udp_server rx(my_port, 0);
     sudare::zmq_initializer zmq_init;
     sudare::zmq_client tx(zmq_init.context(), target);
     sudare::rectangular rect(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH);

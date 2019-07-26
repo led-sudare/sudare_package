@@ -22,7 +22,7 @@ int main(int argc, const char *argv[]) {
       throw std::runtime_error("input [ZMQ PORT] [UDP PORT] [spi CLOCK(MHz)]");
     sudare::zmq_initializer zmq_init;
     sudare::zmq_server zmq(zmq_init.context(), atoi(argv[1]));
-    sudare::udp_server udp(atoi(argv[2]));
+    sudare::udp_server udp(atoi(argv[2]), 1);
     sudare::spi_publisher publisher(atoi(argv[3]) * 1000 * 1000);
     zmq_pollitem_t items[] = {{zmq.socket(), 0, ZMQ_POLLIN, 0},
                               {0, udp.fd(), ZMQ_POLLIN, 0}};

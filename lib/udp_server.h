@@ -9,7 +9,7 @@ class udp_server {
   void close();
 
  public:
-  explicit udp_server(int port);
+  udp_server(int port, int nonblock);
   virtual ~udp_server();
   int recv(char *buf, int size) const;
   int fd() const { return m_fd; }

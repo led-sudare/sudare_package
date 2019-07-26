@@ -11,7 +11,7 @@ void udp_server::close() {
   m_fd = 0;
 }
 
-udp_server::udp_server(int port) : m_fd(0), m_addr({0}) {
+udp_server::udp_server(int port, int nonblock) : m_fd(0), m_addr({0}) {
   std::cout << "UDP PORT : " << port << std::endl;
   m_fd = ::socket(AF_INET, SOCK_DGRAM, 0);
   if (m_fd < 0) error("socket");
@@ -23,6 +23,7 @@ udp_server::udp_server(int port) : m_fd(0), m_addr({0}) {
     close();
     error("bind", err);
   }
+  if (!nonblock) return;
   int v = 1;  // non blocking
   if (::ioctl(m_fd, FIONBIO, &v) < 0) error("ioctl(FIONBIO)");
 }
