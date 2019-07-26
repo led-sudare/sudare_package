@@ -45,8 +45,7 @@ void Show() {
     char const *begin = s_polar->data(a, 0, 0);
     char const *end = begin + dlen;
     std::copy(begin, end, pkt.data() + 3);
-    s_spi->write(pkt.data(), pkt.size(),
-                 0);  // BUF, LEN, CS
+    s_spi->write(pkt.data(), pkt.size(), 0);  // BUF, LEN, CS
   }
 }
 
