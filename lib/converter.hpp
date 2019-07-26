@@ -41,8 +41,8 @@ class bilinear_converter : public converter {
         double az = (m_polar.radius() + m_sin[a] * r) * rz;
         for (int y = 0; y < m_polar.height(); ++y) {
           double ay = y * ry;
-          rgb rgb = m_rect.getBL(ax, ay, az);
-          m_polar.set(a, r, y, rgb);
+          rgb color = m_rect.getBL(ax, ay, az);
+          m_polar.set(a, r, y, color);
         }
       }
     }
@@ -74,8 +74,8 @@ class nearest_neighbor_converter : public converter {
         double az = (m_polar.radius() + m_sin[a] * r) * rz;
         for (int y = 0; y < m_polar.height(); ++y) {
           double ay = y * ry;
-          rgb rgb = m_rect.getNN(ax, ay, az);
-          m_polar.set(a, r, y, rgb);
+          rgb color = m_rect.getNN(ax, ay, az);
+          m_polar.set(a, r, y, color);
         }
       }
     }
