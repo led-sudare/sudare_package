@@ -37,3 +37,35 @@ class spi_publisher : public publisher {
   }
 };
 }  // namespace sudare
+
+/* SPI通信量を間引く処理。FPGAの都合で使用不可となったが将来的に復活するかもしれないし、何より作るのが大変だったからとっておく。
+void fpga_ctrl::write1(const char *p) const {
+  std::array<char, dlen + hlen> pkt0 = {2, 0, 0};  // WRITE, AD0, AD1
+  std::array<char, 1 + hlen> pkt1 = {
+      2, static_cast<char>(dlen >> 8),
+      static_cast<char>(dlen & 0xFF)};  // WRITE, AD0, AD1
+  for (int a = 0; a < angles; ++a) {
+    const char *begin = p + a * dlen;
+    const char *end = begin + dlen;
+    const char *cache = m_cache.data() + a * dlen;
+    const char *mark = nullptr;
+    for (auto it = begin; it != end; ++it, ++cache) {
+      const bool match = *it == *cache;
+      const bool last = it == end - 1;
+      if (!match && mark == nullptr) mark = it;
+      if (last || match) {
+        if (mark == nullptr) continue;
+        int size = static_cast<int>(it - mark) + 1;
+        if (size < 32 && !last)
+          continue;  // ここで適当に間引かないとかえって遅くなる
+        std::copy(it, it + size, pkt0.data() + hlen);
+        spi_write(pkt0.data(), hlen + size, cs);
+        mark = nullptr;
+      }
+    }
+    pkt1[hlen] = static_cast<char>(a);
+    spi_write(pkt1.data(), pkt1.size(), cs);
+  }
+  std::copy(p, p + m_cache.size(), m_cache.begin());
+}
+ */
