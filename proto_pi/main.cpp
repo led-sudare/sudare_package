@@ -6,9 +6,9 @@
 #include <vector>
 #include "sudare.h"
 
-#define CUBE_WIDTH 30
-#define CUBE_HEIGHT 100
-#define CUBE_DEPTH 30
+#define CUBE_WIDTH 16
+#define CUBE_HEIGHT 32
+#define CUBE_DEPTH 8
 
 int N = 100;
 int get_power(int ix) {

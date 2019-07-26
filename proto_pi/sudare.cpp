@@ -6,11 +6,6 @@
 #include "converter.h"
 #include "spi.h"
 
-#define POLAR_HEIGHT 100
-#define POLAR_ANGLE_RESOLUTION 6
-#define POLAR_ANGLES 360 / POLAR_ANGLE_RESOLUTION
-#define POLAR_RADIUS 15
-
 namespace {
 std::shared_ptr<sudare::rectangular> s_rect;
 std::shared_ptr<sudare::polar> s_polar;

@@ -3,6 +3,30 @@
 #include <vector>
 #include "rgb.hpp"
 
+#ifndef RECTANGULAR_WIDTH
+#define RECTANGULAR_WIDTH 30
+#endif
+
+#ifndef RECTANGULAR_HEIGHT
+#define RECTANGULAR_HEIGHT 100
+#endif
+
+#ifndef RECTANGULAR_DEPTH
+#define RECTANGULAR_DEPTH 30
+#endif
+
+#ifndef CUBE_WIDTH
+#define CUBE_WIDTH 16
+#endif
+
+#ifndef CUBE_HEIGHT
+#define CUBE_HEIGHT 32
+#endif
+
+#ifndef CUBE_DEPTH
+#define CUBE_DEPTH 8
+#endif
+
 namespace sudare {
 class rectangular {
   std::vector<rgb> m;

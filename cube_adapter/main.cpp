@@ -5,15 +5,7 @@
 #include "udp_server.h"
 #include "zmq_utils.h"
 
-#define CUBE_WIDTH 16
-#define CUBE_HEIGHT 32
-#define CUBE_DEPTH 8
 #define CUBE_PKT_SIZE CUBE_WIDTH *CUBE_HEIGHT *CUBE_DEPTH * 2
-#define SUDARE_WIDTH 30
-#define SUDARE_HEIGHT 100
-#define SUDARE_ANGLE_RESOLUTION 6
-#define SUDARE_ANGLES 360 / SUDARE_ANGLE_RESOLUTION
-#define SUDARE_PKT_SIZE SUDARE_WIDTH *SUDARE_HEIGHT *SUDARE_ANGLES
 
 int main(int argc, const char *argv[]) {
   try {
@@ -28,7 +20,7 @@ int main(int argc, const char *argv[]) {
     sudare::zmq_initializer zmq_init;
     sudare::zmq_client tx(zmq_init.context(), target);
     sudare::rectangular rect(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH);
-    sudare::polar polar(SUDARE_ANGLES, SUDARE_WIDTH / 2, SUDARE_HEIGHT);
+    sudare::polar polar(SUDARE_ANGLES, SUDARE_RADIUS, SUDARE_HEIGHT);
     sudare::bilinear_converter convert(rect, polar);
     std::array<char, CUBE_PKT_SIZE> cube;
     for (;;) {

@@ -8,13 +8,7 @@
 #include "udp_server.h"
 #include "zmq_utils.h"
 
-#define CUBE_WIDTH 16
-#define CUBE_HEIGHT 32
-#define CUBE_DEPTH 8
 #define CUBE_PKT_SIZE CUBE_WIDTH *CUBE_HEIGHT *CUBE_DEPTH * 2
-#define SUDARE_ANGLES 360 / 6
-#define SUDARE_RADIUS 15
-#define SUDARE_HEIGHT 100
 
 int main(int argc, const char *argv[]) {
   try {

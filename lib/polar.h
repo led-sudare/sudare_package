@@ -3,6 +3,38 @@
 #include <vector>
 #include "rgb.hpp"
 
+#ifndef POLAR_ANGLE_RESOLUTION
+#define POLAR_ANGLE_RESOLUTION 6
+#endif
+
+#ifndef POLAR_ANGLES
+#define POLAR_ANGLES 360 / POLAR_ANGLE_RESOLUTION
+#endif
+
+#ifndef POLAR_RADIUS
+#define POLAR_RADIUS 15
+#endif
+
+#ifndef POLAR_HEIGHT
+#define POLAR_HEIGHT 100
+#endif
+
+#ifndef SUDARE_ANGLE_RESOLUTION
+#define SUDARE_ANGLE_RESOLUTION POLAR_ANGLE_RESOLUTION
+#endif
+
+#ifndef SUDARE_ANGLES
+#define SUDARE_ANGLES POLAR_ANGLES
+#endif
+
+#ifndef SUDARE_RADIUS
+#define SUDARE_RADIUS 15
+#endif
+
+#ifndef SUDARE_HEIGHT
+#define SUDARE_HEIGHT 100
+#endif
+
 namespace sudare {
 class polar {
   int m_angles;

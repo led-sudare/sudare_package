@@ -3,90 +3,21 @@
 #include <iostream>
 #include <memory>  // std::shared_ptr
 #include <thread>  // std::this_thread::sleep_for
+#include "controller.h"
 #include "converter.h"
 #include "publisher.h"
 
 namespace {
-class TimeMeter {
-  std::chrono::time_point<std::chrono::system_clock> m_start;
-  std::string m_symbol;
-
- public:
-  explicit TimeMeter(const char* symbol)
-      : m_start(std::chrono::system_clock::now()), m_symbol(symbol) {}
-  virtual ~TimeMeter() {
-    auto end = std::chrono::system_clock::now();
-    int diff = static_cast<int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(end - m_start)
-            .count());
-    std::cout << m_symbol << " : " << diff << "ms" << std::endl;
-  }
-};
-class Sudare {
-  std::chrono::time_point<std::chrono::system_clock> m_last_sleep_time;
-  enum mode_t { rectangular_mode = 0, polar_mode = 1 } m_mode;
-  sudare::rectangular m_rect;
-  sudare::polar m_polar;
-  sudare::bilinear_converter m_conv;
-  sudare::publisher& m_pub;
-
- public:
-  explicit Sudare(sudare::publisher& pub)
-      : m_last_sleep_time(std::chrono::system_clock::now()),
-        m_mode(rectangular_mode),
-        m_rect(RECTANGULAR_WIDTH, RECTANGULAR_HEIGHT, RECTANGULAR_DEPTH),
-        m_polar(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT),
-        m_conv(m_rect, m_polar),
-        m_pub(pub) {}
-  Sudare(sudare::publisher& pub, size_t rect_width, size_t rect_height,
-         size_t rect_depth)
-      : m_last_sleep_time(std::chrono::system_clock::now()),
-        m_mode(rectangular_mode),
-        m_rect(rect_width, rect_height, rect_depth),
-        m_polar(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT),
-        m_conv(m_rect, m_polar),
-        m_pub(pub) {}
-  void set_led_rect(int x, int y, int z, int rgb) {
-    m_rect.set(x, y, z, rgb);
-    m_mode = rectangular_mode;
-  }
-  void set_led_polar(int a, int r, int h, int rgb) {
-    m_polar.set(a, r, h, rgb);
-    m_mode = polar_mode;
-  }
-  void clear() {
-    m_rect.clear();
-    m_polar.clear();
-  }
-  void send() {
-    if (m_mode == rectangular_mode) {
-      TimeMeter t("convert");
-      m_conv();
-    }
-    TimeMeter t("publish");
-    m_pub(m_polar.data(), m_polar.size());
-  }
-  void sleep(int ms) {
-    std::chrono::time_point now = std::chrono::system_clock::now();
-    int diff =
-        static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(
-                             now - m_last_sleep_time)
-                             .count());
-    ms = std::max(1, ms - diff);
-    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
-    m_last_sleep_time = std::chrono::system_clock::now();
-  }
-};
 sudare::zmq_initializer s_zmq_init;
 std::shared_ptr<sudare::publisher> s_sender;
-std::shared_ptr<Sudare> s;
+std::shared_ptr<sudare::controller> s_ctrl;
 }  // namespace
 
 int sudare_init_sdk(const char* dst) {
   try {
     void* context = s_zmq_init.context();
     s_sender = std::make_shared<sudare::zmq_publisher>(context, dst);
-    s = std::make_shared<Sudare>(*s_sender);
+    s_ctrl = std::make_shared<sudare::controller>(*s_sender);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -96,7 +27,7 @@ int sudare_init_sdk(const char* dst) {
 
 int sudare_set_led_rect(int x, int y, int z, int rgb) {
   try {
-    s->set_led_rect(x, y, z, rgb);
+    s_ctrl->set_led_rect(x, y, z, rgb);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -106,7 +37,7 @@ int sudare_set_led_rect(int x, int y, int z, int rgb) {
 
 int sudare_set_led_polar(int a, int r, int h, int rgb) {
   try {
-    s->set_led_polar(a, r, h, rgb);
+    s_ctrl->set_led_polar(a, r, h, rgb);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -116,7 +47,7 @@ int sudare_set_led_polar(int a, int r, int h, int rgb) {
 
 int sudare_clear(void) {
   try {
-    s->clear();
+    s_ctrl->clear();
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -126,7 +57,7 @@ int sudare_clear(void) {
 
 int sudare_send(void) {
   try {
-    s->send();
+    s_ctrl->send();
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
@@ -136,7 +67,7 @@ int sudare_send(void) {
 
 int sudare_sleep(int ms) {
   try {
-    s->sleep(ms);
+    s_ctrl->sleep(ms);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
