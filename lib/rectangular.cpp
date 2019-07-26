@@ -31,11 +31,11 @@ rectangular::rectangular(int w, int h, int d) {
   m.resize(m_w * m_h * m_d);
 }
 /** 幅取得 */
-int rectangular::getW() const { return m_w; }
+int rectangular::width() const { return m_w; }
 /** 高さ取得 */
-int rectangular::getH() const { return m_h; }
+int rectangular::height() const { return m_h; }
 /** 奥行き取得 */
-int rectangular::getD() const { return m_d; }
+int rectangular::depth() const { return m_d; }
 /** 色設定 */
 void rectangular::set(int x, int y, int z, int color) {
   if (contains(x, y, z)) m[index(x, y, z)] = rgb(color);

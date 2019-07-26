@@ -16,9 +16,9 @@ bilinear_converter::bilinear_converter(rectangular const& rect, polar& polar)
 }
 
 void bilinear_converter::operator()() {
-  const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
-  const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);
-  const double ry = (m_rect.getH() - 1.0) / (m_polar.height() - 1);
+  const double rx = (m_rect.width() - 1.0) / (m_polar.radius() * 2);
+  const double rz = (m_rect.depth() - 1.0) / (m_polar.radius() * 2);
+  const double ry = (m_rect.height() - 1.0) / (m_polar.height() - 1);
   for (int a = 0; a < m_polar.angles(); ++a) {
     for (int r = 1; r <= m_polar.radius(); ++r) {
       double ax = (m_polar.radius() + m_cos[a] * r) * rx;
@@ -43,9 +43,9 @@ nearest_neighbor_converter::nearest_neighbor_converter(rectangular const& rect,
 }
 
 void nearest_neighbor_converter::operator()() {
-  const double rx = (m_rect.getW() - 1.0) / (m_polar.radius() * 2);
-  const double rz = (m_rect.getD() - 1.0) / (m_polar.radius() * 2);
-  const double ry = (m_rect.getH() - 1.0) / (m_polar.height() - 1);
+  const double rx = (m_rect.width() - 1.0) / (m_polar.radius() * 2);
+  const double rz = (m_rect.depth() - 1.0) / (m_polar.radius() * 2);
+  const double ry = (m_rect.height() - 1.0) / (m_polar.height() - 1);
   for (int a = 0; a < m_polar.angles(); ++a) {
     for (int r = 1; r <= m_polar.radius(); ++r) {
       double ax = (m_polar.radius() + m_cos[a] * r) * rx;

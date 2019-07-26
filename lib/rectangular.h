@@ -17,11 +17,11 @@ class rectangular {
  public:
   rectangular(int w, int h, int d);
   /** 幅取得 */
-  int getW() const;
+  int width() const;
   /** 高さ取得 */
-  int getH() const;
+  int height() const;
   /** 奥行き取得 */
-  int getD() const;
+  int depth() const;
   /** 色設定 */
   void set(int x, int y, int z, int color);
   /** 色取得 */
