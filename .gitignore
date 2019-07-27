@@ -12,3 +12,5 @@
 !*.plantuml
 !*.rb
 !*.py
+!*.png
+!*.jpg
