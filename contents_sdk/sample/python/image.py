@@ -17,9 +17,11 @@ img = cv2.resize(img, size)
 cv2.imshow('image', img)
 cv2.waitKey(1)
 
-lib.sudare_clear()
+img = cv2.flip(img, 0)
+img = cv2.flip(img, 1)
 
 for a in range(0, 1000):
+  lib.sudare_clear()
   for x in range(0, size[0]):
     for y in range(0, size[1]):
       c = img[y][x]
