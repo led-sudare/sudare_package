@@ -3,6 +3,7 @@
 #include <iostream>
 #include "error.hpp"
 #ifdef ENABLE_SPI
+#include <fcntl.h>  // open
 #include <linux/spi/spidev.h>
 #include <sys/ioctl.h>
 #endif  // ENABLE_SPI
@@ -27,7 +28,7 @@ spi::~spi() {
 size_t spi::write(const char *data, size_t size, int cs) const {
 #ifdef ENABLE_SPI
   spi_ioc_transfer msg[1] = {{0}};
-  msg[0].tx_buf = (unsigned long)p;
+  msg[0].tx_buf = (unsigned long)data;
   msg[0].len = size;
   msg[0].speed_hz = m_clock;
   msg[0].bits_per_word = 8;
