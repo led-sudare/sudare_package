@@ -34,9 +34,6 @@ int spi_publisher::operator()(const char* data, size_t size) {
   return total;
 }
 
-namespace {
-int index(int a, int r, int h) { return ((a * 15 + r) * 100 + h) * 2; }
-}  // namespace
 spi_publisher2::spi_publisher2(int clock) : m_spi(clock) {}
 int spi_publisher2::operator()(const char* data, size_t size) {
   time_meter tm("spi_publisher2");
@@ -52,11 +49,11 @@ int spi_publisher2::operator()(const char* data, size_t size) {
     pkt.back() = static_cast<char>(a);
     for (int r = 0; r < 15; ++r) {
       for (int h = 0; h < 100; ++h) {
-        const char* src = data + index(a, r, h);
+        const char* src = data + (r * 100 + h) * 2;
         int tmp = (r % 2) * 100 + h;
         int r0 = (tmp % 2) ? r / 2 * 2 + 1 : r / 2 * 2;
         int h0 = tmp / 2;
-        char* dst = pkt.data() + index(a, r0, h0);
+        char* dst = pkt.data() + (r0 * 100 + h0) * 2;
         dst[0] = src[0];
         dst[1] = src[1];
       }
