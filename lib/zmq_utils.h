@@ -18,7 +18,7 @@ class zmq_server {
   zmq_server(void* context, const char* from);
   zmq_server(void* context, int port);
   virtual ~zmq_server();
-  int recv(char* buf, int size) const;
+  int recv(char* buf, int size, int flags) const;
   void* socket() const { return m_socket; }
 };
 
