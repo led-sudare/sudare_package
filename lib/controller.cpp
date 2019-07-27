@@ -2,24 +2,6 @@
 #include <iostream>
 
 namespace sudare {
-namespace {
-class time_meter {
-  std::chrono::time_point<std::chrono::system_clock> m_start;
-  std::string m_symbol;
-
- public:
-  explicit time_meter(const char* symbol)
-      : m_start(std::chrono::system_clock::now()), m_symbol(symbol) {}
-  virtual ~time_meter() {
-    auto end = std::chrono::system_clock::now();
-    int diff = static_cast<int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(end - m_start)
-            .count());
-    std::cout << m_symbol << " : " << diff << "ms" << std::endl;
-  }
-};
-}  // namespace
-
 controller::controller(sudare::publisher& pub)
     : m_last_sleep_time(std::chrono::system_clock::now()),
       m_mode(rectangular_mode),
@@ -48,11 +30,7 @@ void controller::clear() {
   m_polar.clear();
 }
 void controller::send() {
-  if (m_mode == rectangular_mode) {
-    time_meter t("convert");
-    m_conv();
-  }
-  time_meter t("publish");
+  if (m_mode == rectangular_mode) m_conv();
   m_pub(m_polar.data(), m_polar.size());
 }
 void controller::sleep(int ms) {

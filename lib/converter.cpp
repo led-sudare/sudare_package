@@ -1,6 +1,7 @@
 #include "converter.h"
 #include <cmath>
 #include <iostream>
+#include "time_meter.hpp"
 
 namespace sudare {
 converter::converter(rectangular const& rect, polar& polar)
@@ -16,6 +17,7 @@ bilinear_converter::bilinear_converter(rectangular const& rect, polar& polar)
 }
 
 void bilinear_converter::operator()() {
+  time_meter tm("bilinear_converter");
   const double rx = (m_rect.width() - 1.0) / (m_polar.radius() * 2);
   const double rz = (m_rect.depth() - 1.0) / (m_polar.radius() * 2);
   const double ry = (m_rect.height() - 1.0) / (m_polar.height() - 1);
@@ -43,6 +45,7 @@ nearest_neighbor_converter::nearest_neighbor_converter(rectangular const& rect,
 }
 
 void nearest_neighbor_converter::operator()() {
+  time_meter tm("nearest_neighbor_converter");
   const double rx = (m_rect.width() - 1.0) / (m_polar.radius() * 2);
   const double rz = (m_rect.depth() - 1.0) / (m_polar.radius() * 2);
   const double ry = (m_rect.height() - 1.0) / (m_polar.height() - 1);

@@ -1,17 +1,20 @@
 #include "publisher.h"
 #include <array>
 #include <iostream>
+#include "time_meter.hpp"
 
 namespace sudare {
 zmq_publisher::zmq_publisher(void* context, const char* dst)
     : m_client(context, dst) {}
 
 int zmq_publisher::operator()(const char* data, size_t size) {
+  time_meter tm("zmq_publisher");
   return m_client.send(data, size);
 }
 
 spi_publisher::spi_publisher(int clock) : m_spi(clock) {}
 int spi_publisher::operator()(const char* data, size_t size) {
+  time_meter tm("spi_publisher");
   const int angles = 60;
   const int dlen = 3000;
   if (size != angles * dlen) {
@@ -27,6 +30,7 @@ int spi_publisher::operator()(const char* data, size_t size) {
     std::copy(begin, end, pkt.data() + 3);
     total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
   }
+  std::cout << "write spi : " << total << "bytes" << std::endl;
   return total;
 }
 }  // namespace sudare
