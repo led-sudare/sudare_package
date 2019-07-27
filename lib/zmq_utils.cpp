@@ -21,18 +21,27 @@ zmq_initializer::~zmq_initializer() {
   if (zmq_ctx_shutdown(m_context) < 0) error("zmq_ctx_shutdown");
 }
 
+zmq_server::zmq_server(void* context, const char* from) {
+  std::string const tcp = "tcp://" + std::string(from);
+  connect(context, tcp.c_str());
+}
+
 zmq_server::zmq_server(void* context, int port) {
-  m_socket = zmq_socket(context, ZMQ_SUB);
-  if (m_socket == 0) error("zmq_socket");
   std::string const tcp = "tcp://0.0.0.0:" + std::to_string(port);
-  std::cout << "ZMQ SERVER PORT : " << tcp << std::endl;
-  if (zmq_connect(m_socket, tcp.c_str()) < 0) error("zmq_connect");
-  if (zmq_setsockopt(m_socket, ZMQ_SUBSCRIBE, "", 0) < 0)
-    error("zmq_setsockopt");
+  connect(context, tcp.c_str());
 }
 
 zmq_server::~zmq_server() {
   if (zmq_close(m_socket) < 0) error("zmq_close");
+}
+
+void zmq_server::connect(void* context, const char* tcp) {
+  m_socket = zmq_socket(context, ZMQ_SUB);
+  if (m_socket == 0) error("zmq_socket");
+  std::cout << "ZMQ SERVER : " << tcp << std::endl;
+  if (zmq_connect(m_socket, tcp) < 0) error("zmq_connect");
+  if (zmq_setsockopt(m_socket, ZMQ_SUBSCRIBE, "", 0) < 0)
+    error("zmq_setsockopt");
 }
 
 int zmq_server::recv(char* buf, int size) const {
@@ -46,7 +55,7 @@ zmq_client::zmq_client(void* context, const char* dst) {
   m_socket = zmq_socket(context, ZMQ_PUB);
   if (m_socket == 0) error("zmq_socket");
   std::string const tcp = "tcp://" + std::string(dst);
-  std::cout << "ZMQ CLIENT PORT : " << tcp << std::endl;
+  std::cout << "ZMQ CLIENT : " << tcp << std::endl;
   if (dst[0] == '*') {
     if (zmq_bind(m_socket, tcp.c_str()) < 0) error("zmq_bind");
   } else {
