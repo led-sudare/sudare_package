@@ -42,7 +42,7 @@ int spi_publisher2::operator()(const char* data, size_t size) {
     std::cerr << "invalid size : " << size << std::endl;
     throw std::invalid_argument("spi_publisher::operator()");
   }
-  const int dlen = 3200;
+  const int dlen = 256 * 16;
   int total = 0;
   for (int a = 0; a < angles; ++a) {
     std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
@@ -51,9 +51,9 @@ int spi_publisher2::operator()(const char* data, size_t size) {
       for (int h = 0; h < 100; ++h) {
         const char* src = data + ((a * 15 + r) * 100 + h) * 2;
         int tmp = (r % 2) * 100 + h;
-        int r0 = (tmp % 2) ? r / 2 * 2 + 1 : r / 2 * 2;
+        int st = (r / 2) * 256 + (r % 2) * 100;
         int h0 = tmp / 2;
-        char* dst = pkt.data() + 3 + (r0 * 100 + h0) * 2;
+        char* dst = pkt.data() + 3 + (st + h0) * 2;
         dst[0] = src[0];
         dst[1] = src[1];
       }
