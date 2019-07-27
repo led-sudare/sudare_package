@@ -33,6 +33,39 @@ int spi_publisher::operator()(const char* data, size_t size) {
   std::cout << "write spi : " << total << "bytes" << std::endl;
   return total;
 }
+
+namespace {
+int index(int a, int r, int h) { return ((a * 15 + r) * 100 + h) * 2; }
+}  // namespace
+spi_publisher2::spi_publisher2(int clock) : m_spi(clock) {}
+int spi_publisher2::operator()(const char* data, size_t size) {
+  time_meter tm("spi_publisher2");
+  const int angles = 60;
+  if (size != angles * 3000) {
+    std::cerr << "invalid size : " << size << std::endl;
+    throw std::invalid_argument("spi_publisher::operator()");
+  }
+  const int dlen = 3200;
+  int total = 0;
+  for (int a = 0; a < angles; ++a) {
+    std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
+    pkt.back() = static_cast<char>(a);
+    for (int r = 0; r < 15; ++r) {
+      for (int h = 0; h < 100; ++h) {
+        const char* src = data + index(a, r, h);
+        int tmp = (r % 2) * 100 + h;
+        int r0 = (tmp % 2) ? r / 2 * 2 + 1 : r / 2 * 2;
+        int h0 = tmp / 2;
+        char* dst = pkt.data() + index(a, r0, h0);
+        dst[0] = src[0];
+        dst[1] = src[1];
+      }
+    }
+    total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
+  }
+  std::cout << "write spi : " << total << "bytes" << std::endl;
+  return total;
+}
 }  // namespace sudare
 
 /* SPI通信量を間引く処理。FPGAの都合で使用不可となったが将来的に復活するかもしれないし、何より作るのが大変だったからとっておく。
