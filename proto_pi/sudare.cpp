@@ -55,3 +55,19 @@ void DrawAll(uint8_t red, uint8_t green, uint8_t blue) {
       for (int h = 0; h < s_polar->height(); ++h) s_polar->set(a, r, h, color);
   (*s_publisher)(s_polar->data(), s_polar->size());
 }
+
+void DrawRGBLines(void) {
+  sudare::rgb const red(0xFF, 0x00, 0x00);
+  sudare::rgb const green(0x00, 0xFF, 0x00);
+  sudare::rgb const blue(0x00, 0x00, 0xFF);
+  sudare::rgb const colors[] = {red, green, blue};
+  for (int a = 0; a < s_polar->angles(); ++a) {
+    for (int r = 0; r < s_polar->radius(); ++r) {
+      auto color = colors[r % 3];
+      for (int h = 0; h < s_polar->height(); ++h) {
+        s_polar->set(a, r, h, color);
+      }
+    }
+  }
+  (*s_publisher)(s_polar->data(), s_polar->size());
+}

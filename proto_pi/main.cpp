@@ -678,6 +678,8 @@ int main(int argc, const char* argv[]) {
     return 1;
   }
 #if 1
+  DrawRGBLines();
+#elif 1
   for (;;) {
     DrawAll(0xFF, 0x00, 0x00);
     Wait(1000);

@@ -40,3 +40,5 @@ void Show(void);
 void Wait(int ms);
 
 void DrawAll(uint8_t red, uint8_t green, uint8_t blue);
+
+void DrawRGBLines(void);
