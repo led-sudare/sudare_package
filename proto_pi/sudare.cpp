@@ -19,7 +19,8 @@ int InitSdk(int width, int height, int depth, int clock_MHz) {
     s_polar = std::make_shared<sudare::polar>(POLAR_ANGLES, POLAR_RADIUS,
                                               POLAR_HEIGHT);
     s_conv = std::make_shared<sudare::bilinear_converter>(*s_rect, *s_polar);
-    s_publisher = std::make_shared<sudare::spi_publisher>(10 * 1000 * 1000);
+    s_publisher =
+        std::make_shared<sudare::spi_publisher>(clock_MHz * 1000 * 1000);
     return 0;
   } catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;
