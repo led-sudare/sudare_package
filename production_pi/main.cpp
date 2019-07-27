@@ -29,7 +29,7 @@ int main(int argc, const char *argv[]) {
       if (items[0].revents & ZMQ_POLLIN) {
         int size = zmq.recv(polar.data(), polar.size());
         printf("%08d ZMQ Packet size : %d\n", ++n, size);
-        if (size != polar.size()) continue;
+        if (size - polar.size()) continue;
         publisher(polar.data(), polar.size());
       }
       if (items[1].revents & ZMQ_POLLIN) {
@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]) {
           size = res;
         }
         printf("%08d UDP Packet size : %d\n", ++n, size);
-        if (size != cube.size()) continue;
+        if (size - cube.size()) continue;
         rect.set_from_3d_led_pkt(cube.data());
         convert();
         publisher(polar.data(), polar.size());

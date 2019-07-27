@@ -1,11 +1,11 @@
 #include "spi.h"
+#include <unistd.h>  // close, usleep
 #include <iostream>
 #include "error.hpp"
 #ifdef ENABLE_SPI
 #include <linux/spi/spidev.h>
-#else
-#include <unistd.h>  // close, usleep
-#endif               // ENABLE_SPI
+#include <sys/ioctl.h>
+#endif  // ENABLE_SPI
 
 namespace sudare {
 spi::spi(int clock) : m_clock(clock) {
