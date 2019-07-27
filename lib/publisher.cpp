@@ -53,7 +53,7 @@ int spi_publisher2::operator()(const char* data, size_t size) {
         int tmp = (r % 2) * 100 + h;
         int r0 = (tmp % 2) ? r / 2 * 2 + 1 : r / 2 * 2;
         int h0 = tmp / 2;
-        char* dst = pkt.data() + (r0 * 100 + h0) * 2;
+        char* dst = pkt.data() + 3 + (r0 * 100 + h0) * 2;
         dst[0] = src[0];
         dst[1] = src[1];
       }
