@@ -4,8 +4,7 @@ After = rc-local.service
  
 [Service]
 Type = simple
-WorkingDirectory = /home/pi/proto_pi
-ExecStart = /home/pi/proto_pi/proto_pi 10
+ExecStart = /home/pi/sudare_package/proto_pi/proto_pi 10
 StandardOutput = journal
 StandardError = journal
 Restart = on-failure
