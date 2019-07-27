@@ -25,7 +25,7 @@ void polar::clear() { std::fill(m.begin(), m.end(), 0); }
 
 void polar::set(int a, int r, int h, int color) { set(a, r, h, rgb(color)); }
 
-void polar::set(int a, int r, int h, rgb color) {
+void polar::set(int a, int r, int h, rgb const& color) {
   if (contains(a, r, h)) color.to565(data(a, r, h));
 }
 

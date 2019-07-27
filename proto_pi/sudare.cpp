@@ -4,13 +4,13 @@
 #include <memory>
 #include <thread>
 #include "converter.h"
-#include "spi.h"
+#include "publisher.h"
 
 namespace {
 std::shared_ptr<sudare::rectangular> s_rect;
 std::shared_ptr<sudare::polar> s_polar;
 std::shared_ptr<sudare::converter> s_conv;
-std::shared_ptr<sudare::spi> s_spi;
+std::shared_ptr<sudare::publisher> s_publisher;
 }  // namespace
 
 int InitSdk(int width, int height, int depth, int clock_MHz) {
@@ -19,7 +19,7 @@ int InitSdk(int width, int height, int depth, int clock_MHz) {
     s_polar = std::make_shared<sudare::polar>(POLAR_ANGLES, POLAR_RADIUS,
                                               POLAR_HEIGHT);
     s_conv = std::make_shared<sudare::bilinear_converter>(*s_rect, *s_polar);
-    s_spi = std::make_shared<sudare::spi>(10 * 1000 * 1000);
+    s_publisher = std::make_shared<sudare::spi_publisher>(10 * 1000 * 1000);
     return 0;
   } catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;
@@ -33,15 +33,7 @@ void Clear() { s_rect->clear(); }
 
 void Show() {
   (*s_conv)();
-  const int dlen = 3000;
-  for (int a = 0; a < POLAR_ANGLES; ++a) {
-    std::array<char, dlen + 4> pkt{2, 0, 0};  // WR, AD0, AD1
-    pkt.back() = a;
-    char const *begin = s_polar->data(a, 0, 0);
-    char const *end = begin + dlen;
-    std::copy(begin, end, pkt.data() + 3);
-    s_spi->write(pkt.data(), pkt.size(), 0);  // BUF, LEN, CS
-  }
+  (*s_publisher)(s_polar->data(), s_polar->size());
 }
 
 void Wait(int ms) {
@@ -56,13 +48,9 @@ void Wait(int ms) {
 }
 
 void DrawAll(uint8_t red, uint8_t green, uint8_t blue) {
-  sudare::rgb color(red, green, blue);
-  for (char a = 0; a < 60; ++a) {
-    std::array<char, 3004> pkt{2, 0, 0};  // WR, AD0, AD1
-    pkt.back() = a;
-    char *p = pkt.data() + 3;
-    for (int r = 1; r <= 15; ++r)
-      for (int y = 0; y < 100; ++y, p += 2) color.to565(p);
-    s_spi->write(pkt.data(), pkt.size(), 0);  // buf, len, cs
-  }
+  sudare::rgb const color(red, green, blue);
+  for (int a = 0; a < s_polar->angles(); ++a)
+    for (int r = 0; r < s_polar->radius(); ++r)
+      for (int h = 0; h < s_polar->height(); ++h) s_polar->set(a, r, h, color);
+  (*s_publisher)(s_polar->data(), s_polar->size());
 }

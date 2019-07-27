@@ -59,7 +59,7 @@ class polar {
   /** 色設定 */
   void set(int a, int r, int h, int color);
   /** 色設定 */
-  void set(int a, int r, int h, rgb color);
+  void set(int a, int r, int h, rgb const& color);
   /** 指定位置の色取得 */
   char* data(int a, int r, int h);
   /** 指定位置の色取得 */
