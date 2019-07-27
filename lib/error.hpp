@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string.h>  // strerror
 #include <sstream>
 
 namespace sudare {
