@@ -56,7 +56,7 @@ void controller::send() {
   m_pub(m_polar.data(), m_polar.size());
 }
 void controller::sleep(int ms) {
-  std::chrono::time_point now = std::chrono::system_clock::now();
+  auto now = std::chrono::system_clock::now();
   int diff =
       static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(
                            now - m_last_sleep_time)
