@@ -50,10 +50,9 @@ int spi_publisher2::operator()(const char* data, size_t size) {
     for (int r = 0; r < 15; ++r) {
       for (int h = 0; h < 100; ++h) {
         const char* src = data + ((a * 15 + r) * 100 + h) * 2;
-        int tmp = (r % 2) * 100 + h;
-        int st = (r / 2) * 256 + (r % 2) * 100;
-        int h0 = tmp / 2;
-        char* dst = pkt.data() + 3 + (st + h0) * 2;
+        int rr = (r / 2) * 256 + (r % 2) * 100;
+        int hh = ((r % 2) * 100 + h) / 2;
+        char* dst = pkt.data() + 3 + (rr + hh) * 2;
         dst[0] = src[0];
         dst[1] = src[1];
       }
