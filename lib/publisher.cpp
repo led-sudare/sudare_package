@@ -49,7 +49,7 @@ int spi_publisher2::operator()(const char* data, size_t size) {
     pkt.back() = static_cast<char>(a);
     for (int r = 0; r < 15; ++r) {
       for (int h = 0; h < 100; ++h) {
-        const char* src = data + (r * 100 + h) * 2;
+        const char* src = data + ((a * 15 + r) * 100 + h) * 2;
         int tmp = (r % 2) * 100 + h;
         int r0 = (tmp % 2) ? r / 2 * 2 + 1 : r / 2 * 2;
         int h0 = tmp / 2;
