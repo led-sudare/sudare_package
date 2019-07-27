@@ -47,7 +47,6 @@ void zmq_server::connect(void* context, const char* tcp) {
 int zmq_server::recv(char* buf, int size, int flags) const {
   int res = zmq_recv(m_socket, buf, size, flags);
   if (res < 0 && zmq_errno() != EAGAIN) error("zmq_recv");
-  std::cout << "zmq received : " << res << "bytes" << std::endl;
   return res;
 }
 
