@@ -34,47 +34,6 @@ int spi_publisher::operator()(const char* data, size_t size) {
   std::cout << "write spi : " << total << "bytes" << std::endl;
   return total;
 }
-
-spi_publisher2::spi_publisher2(int clock) : m_spi(clock) {}
-int spi_publisher2::operator()(const char* data, size_t size) {
-  time_meter tm("spi_publisher2");
-  const int angles = 60;
-  if (size != angles * 3000) {
-    std::cerr << "invalid size : " << size << std::endl;
-    throw std::invalid_argument("spi_publisher::operator()");
-  }
-  const int dlen = 256 * 16;
-  int total = 0;
-  for (int a = 0; a < angles; ++a) {
-    std::array<char, dlen + 1> buf;
-    buf.back() = static_cast<char>(a);
-    for (int r = 0; r < 15; ++r) {
-      for (int h = 0; h < 100; ++h) {
-        const char* src = data + ((a * 15 + r) * 100 + h) * 2;
-        int rr = (r / 2) * 256 + (r % 2) * 100;
-        int hh = ((r % 2) * 100 + h) / 2;
-        char* dst = buf.data() + (rr + hh) * 2;
-        dst[0] = src[0];
-        dst[1] = src[1];
-      }
-    }
-    int unit_size = 3000;
-    for (size_t i = 0; i < buf.size();) {
-      int s = std::min<int>(unit_size, buf.size() - i);
-      std::vector<char> pkt(s + 3);
-      pkt[0] = 2;
-      pkt[1] = static_cast<char>(i >> 8);
-      pkt[2] = static_cast<char>(i & 0xFF);
-      auto begin = buf.begin() + i;
-      auto end = begin + s;
-      std::copy(begin, end, pkt.begin() + 3);
-      total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
-      i += s;
-    }
-  }
-  std::cout << "write spi : " << total << "bytes" << std::endl;
-  return total;
-}
 }  // namespace sudare
 
 /* SPI通信量を間引く処理。FPGAの都合で使用不可となったが将来的に復活するかもしれないし、何より作るのが大変だったからとっておく。
