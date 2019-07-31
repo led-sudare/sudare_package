@@ -9,8 +9,8 @@ controller::controller(sudare::publisher& pub)
       m_polar(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT),
       m_conv(m_rect, m_polar),
       m_pub(pub) {}
-controller::controller(sudare::publisher& pub, size_t rect_width,
-                       size_t rect_height, size_t rect_depth)
+controller::controller(sudare::publisher& pub, int rect_width, int rect_height,
+                       int rect_depth)
     : m_last_sleep_time(std::chrono::system_clock::now()),
       m_mode(rectangular_mode),
       m_rect(rect_width, rect_height, rect_depth),

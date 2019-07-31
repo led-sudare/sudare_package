@@ -34,6 +34,25 @@ int spi_publisher::operator()(const char* data, size_t size) {
   std::cout << "write spi : " << total << "bytes" << std::endl;
   return total;
 }
+
+spi_mini_publisher::spi_mini_publisher(int clock) : m_spi(clock) {}
+int spi_mini_publisher::operator()(const char* data, size_t size) {
+  time_meter tm("spi_mini_publisher");
+  const int angles = 60;
+  const int dlen = 3000;
+  if (size != angles * dlen) {
+    std::cerr << "invalid size : " << size << std::endl;
+    throw std::invalid_argument("spi_publisher::operator()");
+  }
+  int total = 0;
+  for (int a = 0; a < angles; ++a) {
+    std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
+    pkt.back() = static_cast<char>(a);
+    // TODO: 縮めてからpktにコピーする
+  }
+  std::cout << "write spi : " << total << "bytes" << std::endl;
+  return total;
+}
 }  // namespace sudare
 
 /* SPI通信量を間引く処理。FPGAの都合で使用不可となったが将来的に復活するかもしれないし、何より作るのが大変だったからとっておく。

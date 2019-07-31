@@ -15,8 +15,8 @@ class controller {
 
  public:
   explicit controller(sudare::publisher& pub);
-  controller(sudare::publisher& pub, size_t rect_width, size_t rect_height,
-             size_t rect_depth);
+  controller(sudare::publisher& pub, int rect_width, int rect_height,
+             int rect_depth);
   void set_led_rect(int x, int y, int z, int rgb);
   void set_led_polar(int a, int r, int h, int rgb);
   void clear();

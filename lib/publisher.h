@@ -24,4 +24,11 @@ class spi_publisher : public publisher {
   explicit spi_publisher(int clock);
   int operator()(const char* data, size_t size);
 };
+class spi_mini_publisher : public publisher {
+  sudare::spi m_spi;
+
+ public:
+  explicit spi_mini_publisher(int clock);
+  int operator()(const char* data, size_t size);
+};
 }  // namespace sudare

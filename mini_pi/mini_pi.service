@@ -1,12 +1,12 @@
 [Unit]
-Description = sudare pi
+Description = mini pi
 After = rc-local.service
  
 [Service]
 Type = simple
-WorkingDirectory = /home/pi/sudare_pi
-ExecStart = /home/pi/sudare_pi/sudare_pi 1234 4567 10
+ExecStart = /home/pi/sudare_package/mini_pi/mini_pi 192.168.11.20 5511 20
 StandardOutput = journal
+StandardError = journal
 Restart = on-failure
 RestartSec = 3s
  
