@@ -21,6 +21,14 @@ polar::polar(int angles, int radius, int height)
       m_height(height),
       m(angles * radius * height * 2) {}
 
+polar::polar(int angles, int radius, int height, const char* p)
+    : m_angles(angles),
+      m_radius(radius),
+      m_height(height),
+      m(angles * radius * height * 2) {
+  std::copy(p, p + m.size(), m.begin());
+}
+
 void polar::clear() { std::fill(m.begin(), m.end(), 0); }
 
 void polar::set(int a, int r, int h, int color) { set(a, r, h, rgb(color)); }

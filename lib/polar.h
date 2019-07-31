@@ -54,6 +54,13 @@ class polar {
    * @param[in] height 高さ
    */
   polar(int angles, int radius, int height);
+  /**
+   * @param[in] angles 角度数
+   * @param[in] radius 半径
+   * @param[in] height 高さ
+   * @param[in] p データ
+   */
+  polar(int angles, int radius, int height, const char* p);
   /** 消去 */
   void clear();
   /** 色設定 */

@@ -2,6 +2,7 @@
 #include <array>
 #include <iostream>
 #include <vector>
+#include "polar.h"
 #include "time_meter.hpp"
 
 namespace sudare {
@@ -35,6 +36,17 @@ int spi_publisher::operator()(const char* data, size_t size) {
   return total;
 }
 
+namespace {
+rgbd average(polar const& src, int a, int r0, int r1, int y0, int y1) {
+  rgbd v;
+  for (int r = r0; r < r1; ++r) {
+    for (int y = y0; y < y1; ++y) {
+      // TODO: 足す
+    }
+  }
+  return v;  // TODO: 割る
+}
+}  // namespace
 spi_mini_publisher::spi_mini_publisher(int clock) : m_spi(clock) {}
 int spi_mini_publisher::operator()(const char* data, size_t size) {
   time_meter tm("spi_mini_publisher");
@@ -42,13 +54,21 @@ int spi_mini_publisher::operator()(const char* data, size_t size) {
   const int dlen = 3000;
   if (size != angles * dlen) {
     std::cerr << "invalid size : " << size << std::endl;
-    throw std::invalid_argument("spi_publisher::operator()");
+    throw std::invalid_argument("spi_mini_publisher::operator()");
   }
+  polar po(SUDARE_ANGLES, SUDARE_RADIUS, SUDARE_HEIGHT, data);
   int total = 0;
   for (int a = 0; a < angles; ++a) {
     std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
     pkt.back() = static_cast<char>(a);
-    // TODO: 縮めてからpktにコピーする
+    for (int r0 = 0; r0 < 5; ++r0) {
+      for (int y0 = 0; y0 < 10; ++y0) {
+        rgbd v = average(po, a, r0, r0 + 3, y0, y0 + 10);
+        int index = ((a * SUDARE_RADIUS + (r0 + 10)) * SUDARE_HEIGHT + y0) * 2;
+        v.to565(pkt.data() + 3 + index);
+      }
+    }
+    total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
   }
   std::cout << "write spi : " << total << "bytes" << std::endl;
   return total;
