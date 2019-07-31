@@ -14,9 +14,10 @@ int main(int argc, const char* argv[]) {
       std::cerr << "failed to open video file" << std::endl;
       return 1;
     }
-    while (cap.isOpened()) {
+    for (;;) {
       cv::Mat m;
       cap >> m;
+      if (m.empty()) break;
       cv::resize(m, m, cv::Size(30, 100));
       cv::imshow("image", m);
       cv::waitKey(1);
