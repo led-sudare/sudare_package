@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include "converter.h"
-#include "error.hpp"
+#include "panic.hpp"
 #include "publisher.h"
 #include "udp_server.h"
 #include "zmq_utils.h"
@@ -26,7 +26,7 @@ int main(int argc, const char *argv[]) {
     sudare::polar polar(SUDARE_ANGLES, SUDARE_RADIUS, SUDARE_HEIGHT);
     sudare::bilinear_converter convert(rect, polar);
     for (int n = 0;;) {
-      if (zmq_poll(items, 2, -1) < 0) sudare::error("zmq_poll");
+      if (zmq_poll(items, 2, -1) < 0) sudare::panic("zmq_poll");
       if (items[0].revents & ZMQ_POLLIN) {
         int size = 0;
         // 最新のデータだけ欲しいので、バッファが空になるまで受信を続ける

@@ -1,7 +1,7 @@
 #include "spi.h"
 #include <unistd.h>  // close, usleep
 #include <iostream>
-#include "error.hpp"
+#include "panic.hpp"
 #ifdef ENABLE_SPI
 #include <fcntl.h>  // open
 #include <linux/spi/spidev.h>
@@ -14,14 +14,14 @@ spi::spi(int clock) : m_clock(clock) {
 #ifdef ENABLE_SPI
   const char *dev = "/dev/spidev0.0";
   int res = open(dev, O_RDWR);
-  if (res < 0) error("open(/dev/spidev0.0)");
+  if (res < 0) panic("open(/dev/spidev0.0)");
   m_fd = res;
 #endif  // ENABLE_SPI
 }
 
 spi::~spi() {
 #ifdef ENABLE_SPI
-  if (close(m_fd) < 0) error("close");
+  if (close(m_fd) < 0) panic("close");
 #endif  // ENABLE_SPI
 }
 
@@ -34,7 +34,7 @@ size_t spi::write(const char *data, size_t size, int cs) const {
   msg[0].bits_per_word = 8;
   msg[0].cs_change = cs;
   int res = ioctl(m_fd, SPI_IOC_MESSAGE(1), &msg);
-  if (res < 0) error("ioctl(SPI_IOC_MESSAGE)");
+  if (res < 0) panic("ioctl(SPI_IOC_MESSAGE)");
 #else
   double sec = size * 8.0 / m_clock;
   int ns = static_cast<int>(sec * 1000 * 1000);
