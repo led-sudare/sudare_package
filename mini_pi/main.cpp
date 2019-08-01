@@ -1,7 +1,6 @@
 #include <zmq.h>
 #include <array>
 #include <iostream>
-#include <sstream>
 #include "converter.h"
 #include "panic.hpp"
 #include "publisher.h"
