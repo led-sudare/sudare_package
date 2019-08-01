@@ -39,12 +39,10 @@ int spi_publisher::operator()(const char* data, size_t size) {
 namespace {
 rgbd average(polar const& src, int a, int r0, int r1, int y0, int y1) {
   rgbd v;
-  for (int r = r0; r < r1; ++r) {
-    for (int y = y0; y < y1; ++y) {
-      // TODO: 足す
-    }
-  }
-  return v;  // TODO: 割る
+  int cnt = 0;
+  for (int r = r0; r < r1; ++r)
+    for (int y = y0; y < y1; ++y, ++cnt) v += rgb(src.data(a, r, y));
+  return v / cnt;
 }
 }  // namespace
 spi_mini_publisher::spi_mini_publisher(int clock) : m_spi(clock) {}
@@ -63,8 +61,8 @@ int spi_mini_publisher::operator()(const char* data, size_t size) {
     pkt.back() = static_cast<char>(a);
     for (int r0 = 0; r0 < 5; ++r0) {
       for (int y0 = 0; y0 < 10; ++y0) {
-        rgbd v = average(po, a, r0, r0 + 3, y0, y0 + 10);
-        int index = ((a * SUDARE_RADIUS + (r0 + 10)) * SUDARE_HEIGHT + y0) * 2;
+        rgbd v = average(po, a, r0 * 3, (r0 + 1) * 3, y0 * 10, (y0 + 1) * 10);
+        int index = ((r0 + 10) * SUDARE_HEIGHT + y0) * 2;
         v.to565(pkt.data() + 3 + index);
       }
     }

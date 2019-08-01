@@ -35,6 +35,14 @@ class rgb_ {
   T getR() const { return r; }
   T getG() const { return g; }
   T getB() const { return b; }
+  template <typename T0>
+  rgb_<T>& operator+=(rgb_<T0> const& c) {
+    r += c.getR();
+    g += c.getG();
+    b += c.getB();
+    return *this;
+  }
+  rgb_<T> operator/(int d) const { return rgb_<T>(r / d, g / d, b / d); }
 };
 
 typedef rgb_<uint8_t> rgb;
