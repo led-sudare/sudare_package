@@ -24,7 +24,7 @@ bool is_standard_size(polar const& po) {
 zmq_publisher::zmq_publisher(void* context, const char* dst)
     : m_client(context, dst) {}
 
-int zmq_publisher::operator()(polar const& po) {
+int zmq_publisher::operator()(polar const& po) const {
   if (!is_standard_size(po))
     throw std::invalid_argument("zmq_publisher::operator() invalid size");
   time_meter tm("zmq_publisher");
@@ -32,7 +32,7 @@ int zmq_publisher::operator()(polar const& po) {
 }
 
 spi_publisher::spi_publisher(int clock) : m_spi(clock) {}
-int spi_publisher::operator()(polar const& po) {
+int spi_publisher::operator()(polar const& po) const {
   if (!is_standard_size(po))
     throw std::invalid_argument("spi_publisher::operator() invalid size");
   time_meter tm("spi_publisher");
@@ -59,7 +59,7 @@ rgbd average(polar const& src, int a, int r0, int r1, int y0, int y1) {
 }
 }  // namespace
 spi_mini_publisher::spi_mini_publisher(int clock) : m_spi(clock) {}
-int spi_mini_publisher::operator()(polar const& po) {
+int spi_mini_publisher::operator()(polar const& po) const {
   if (!is_standard_size(po))
     throw std::invalid_argument("spi_mini_publisher::operator() invalid size");
   time_meter tm("spi_mini_publisher");

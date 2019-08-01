@@ -9,6 +9,7 @@
 
 namespace {
 sudare::zmq_initializer s_zmq_init;
+sudare::bilinear_converter s_convert;
 std::shared_ptr<sudare::publisher> s_sender;
 std::shared_ptr<sudare::controller> s_ctrl;
 }  // namespace
@@ -17,7 +18,7 @@ int sudare_init_sdk(const char* dst) {
   try {
     void* context = s_zmq_init.context();
     s_sender = std::make_shared<sudare::zmq_publisher>(context, dst);
-    s_ctrl = std::make_shared<sudare::controller>(*s_sender);
+    s_ctrl = std::make_shared<sudare::controller>(s_convert, *s_sender);
     return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;

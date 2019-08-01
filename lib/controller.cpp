@@ -2,20 +2,22 @@
 #include <iostream>
 
 namespace sudare {
-controller::controller(sudare::publisher& pub)
+controller::controller(sudare::converter const& conv,
+                       sudare::publisher const& pub)
     : m_last_sleep_time(std::chrono::system_clock::now()),
       m_mode(rectangular_mode),
       m_rect(RECTANGULAR_WIDTH, RECTANGULAR_HEIGHT, RECTANGULAR_DEPTH),
       m_polar(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT),
-      m_conv(m_rect, m_polar),
+      m_conv(conv),
       m_pub(pub) {}
-controller::controller(sudare::publisher& pub, int rect_width, int rect_height,
-                       int rect_depth)
+controller::controller(sudare::converter const& conv,
+                       sudare::publisher const& pub, int rect_width,
+                       int rect_height, int rect_depth)
     : m_last_sleep_time(std::chrono::system_clock::now()),
       m_mode(rectangular_mode),
       m_rect(rect_width, rect_height, rect_depth),
       m_polar(POLAR_ANGLES, POLAR_RADIUS, POLAR_HEIGHT),
-      m_conv(m_rect, m_polar),
+      m_conv(conv),
       m_pub(pub) {}
 void controller::set_led_rect(int x, int y, int z, int rgb) {
   m_rect.set(x, y, z, rgb);
@@ -30,7 +32,7 @@ void controller::clear() {
   m_polar.clear();
 }
 void controller::send() {
-  if (m_mode == rectangular_mode) m_conv();
+  if (m_mode == rectangular_mode) m_conv(m_rect, m_polar);
   m_pub(m_polar);
 }
 void controller::sleep(int ms) {

@@ -24,7 +24,7 @@ int main(int argc, const char *argv[]) {
     std::array<char, CUBE_PKT_SIZE> cube;
     sudare::rectangular rect(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH);
     sudare::polar polar(SUDARE_ANGLES, SUDARE_RADIUS, SUDARE_HEIGHT);
-    sudare::bilinear_converter convert(rect, polar);
+    sudare::bilinear_converter convert;
     for (int n = 0;;) {
       if (zmq_poll(items, 2, -1) < 0) sudare::panic("zmq_poll");
       if (items[0].revents & ZMQ_POLLIN) {
@@ -52,7 +52,7 @@ int main(int argc, const char *argv[]) {
         printf("%08d UDP Packet size : %d\n", n, size);
         if (size - cube.size()) continue;
         rect.set_from_3d_led_pkt(cube.data());
-        convert();
+        convert(rect, polar);
         publisher(polar);
       }
     }

@@ -21,7 +21,7 @@ int main(int argc, const char *argv[]) {
     sudare::zmq_client tx(zmq_init.context(), target);
     sudare::rectangular rect(CUBE_WIDTH, CUBE_HEIGHT, CUBE_DEPTH);
     sudare::polar polar(SUDARE_ANGLES, SUDARE_RADIUS, SUDARE_HEIGHT);
-    sudare::bilinear_converter convert(rect, polar);
+    sudare::bilinear_converter convert;
     std::array<char, CUBE_PKT_SIZE> cube;
     for (;;) {
       int size = rx.recv(cube.data(), cube.size());
@@ -31,7 +31,7 @@ int main(int argc, const char *argv[]) {
         continue;
       }
       rect.set_from_3d_led_pkt(cube.data());
-      convert();
+      convert(rect, polar);
       tx.send(polar.data(), polar.size());
     }
   } catch (std::exception const &e) {

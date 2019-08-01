@@ -9,7 +9,7 @@
 namespace {
 std::shared_ptr<sudare::rectangular> s_rect;
 std::shared_ptr<sudare::polar> s_polar;
-std::shared_ptr<sudare::converter> s_conv;
+sudare::bilinear_converter convert;
 std::shared_ptr<sudare::publisher> s_publisher;
 }  // namespace
 
@@ -18,7 +18,6 @@ int InitSdk(int width, int height, int depth, int clock_MHz) {
     s_rect = std::make_shared<sudare::rectangular>(width, height, depth);
     s_polar = std::make_shared<sudare::polar>(POLAR_ANGLES, POLAR_RADIUS,
                                               POLAR_HEIGHT);
-    s_conv = std::make_shared<sudare::bilinear_converter>(*s_rect, *s_polar);
     s_publisher =
         std::make_shared<sudare::spi_publisher>(clock_MHz * 1000 * 1000);
     return 0;
@@ -33,7 +32,7 @@ void SetLed(int x, int y, int z, int rgb) { s_rect->set(x, y, z, rgb); }
 void Clear() { s_rect->clear(); }
 
 void Show() {
-  (*s_conv)();
+  convert(*s_rect, *s_polar);
   (*s_publisher)(*s_polar);
 }
 
