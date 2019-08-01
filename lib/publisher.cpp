@@ -5,29 +5,42 @@
 #include "polar.h"
 #include "time_meter.hpp"
 
+#ifndef MINI_RADIUS
+#define MINI_RADIUS 5
+#endif
+
+#ifndef MINI_HEIGHT
+#define MINI_HEIGHT 10
+#endif
+
 namespace sudare {
+namespace {
+const int dlen = SUDARE_RADIUS * SUDARE_HEIGHT * 2;
+bool is_standard_size(polar const& po) {
+  return po.angles() == SUDARE_ANGLES && po.radius() == SUDARE_RADIUS &&
+         po.height() == SUDARE_HEIGHT;
+}
+}  // namespace
 zmq_publisher::zmq_publisher(void* context, const char* dst)
     : m_client(context, dst) {}
 
-int zmq_publisher::operator()(const char* data, size_t size) {
+int zmq_publisher::operator()(polar const& po) {
+  if (!is_standard_size(po))
+    throw std::invalid_argument("zmq_publisher::operator() invalid size");
   time_meter tm("zmq_publisher");
-  return m_client.send(data, size);
+  return m_client.send(po.data(), po.size());
 }
 
 spi_publisher::spi_publisher(int clock) : m_spi(clock) {}
-int spi_publisher::operator()(const char* data, size_t size) {
+int spi_publisher::operator()(polar const& po) {
+  if (!is_standard_size(po))
+    throw std::invalid_argument("spi_publisher::operator() invalid size");
   time_meter tm("spi_publisher");
-  const int angles = 60;
-  const int dlen = 3000;
-  if (size != angles * dlen) {
-    std::cerr << "invalid size : " << size << std::endl;
-    throw std::invalid_argument("spi_publisher::operator()");
-  }
   int total = 0;
-  for (int a = 0; a < angles; ++a) {
+  for (int a = 0; a < po.angles(); ++a) {
     std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
     pkt.back() = static_cast<char>(a);
-    const char* begin = data + a * dlen;
+    const char* begin = po.data(a, 0, 0);
     const char* end = begin + dlen;
     std::copy(begin, end, pkt.data() + 3);
     total += static_cast<int>(m_spi.write(pkt.data(), pkt.size(), 0));
@@ -46,23 +59,21 @@ rgbd average(polar const& src, int a, int r0, int r1, int y0, int y1) {
 }
 }  // namespace
 spi_mini_publisher::spi_mini_publisher(int clock) : m_spi(clock) {}
-int spi_mini_publisher::operator()(const char* data, size_t size) {
+int spi_mini_publisher::operator()(polar const& po) {
+  if (!is_standard_size(po))
+    throw std::invalid_argument("spi_mini_publisher::operator() invalid size");
   time_meter tm("spi_mini_publisher");
-  const int angles = 60;
-  const int dlen = 3000;
-  if (size != angles * dlen) {
-    std::cerr << "invalid size : " << size << std::endl;
-    throw std::invalid_argument("spi_mini_publisher::operator()");
-  }
-  polar po(SUDARE_ANGLES, SUDARE_RADIUS, SUDARE_HEIGHT, data);
   int total = 0;
-  for (int a = 0; a < angles; ++a) {
+  for (int a = 0; a < po.angles(); ++a) {
     std::array<char, dlen + 4> pkt = {2, 0, 0};  // WRITE, AD0, AD1
     pkt.back() = static_cast<char>(a);
-    for (int r0 = 0; r0 < 5; ++r0) {
-      for (int y0 = 0; y0 < 10; ++y0) {
-        rgbd v = average(po, a, r0 * 3, (r0 + 1) * 3, y0 * 10, (y0 + 1) * 10);
-        int index = ((r0 + 10) * SUDARE_HEIGHT + y0) * 2;
+    for (int r0 = 0; r0 < MINI_RADIUS; ++r0) {
+      for (int y0 = 0; y0 < MINI_HEIGHT; ++y0) {
+        rgbd v = average(po, a, r0 * po.radius() / MINI_RADIUS,
+                         (r0 + 1) * po.radius() / MINI_RADIUS,
+                         y0 * po.height() / MINI_HEIGHT,
+                         (y0 + 1) * po.height() / MINI_HEIGHT);
+        int index = ((r0 + 10) * po.height() + y0) * 2;
         v.to565(pkt.data() + 3 + index);
       }
     }

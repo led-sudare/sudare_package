@@ -30,7 +30,7 @@ int main(int argc, const char *argv[]) {
         }
         printf("%08d ZMQ Packet size : %d\n", n, size);
         if (size - polar.size()) continue;
-        publisher(polar.data(), polar.size());
+        publisher(polar);
       }
     }
   } catch (std::exception const &e) {

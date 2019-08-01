@@ -38,7 +38,7 @@ int main(int argc, const char *argv[]) {
         }
         printf("%08d ZMQ Packet size : %d\n", n, size);
         if (size - polar.size()) continue;
-        publisher(polar.data(), polar.size());
+        publisher(polar);
       }
       if (items[1].revents & ZMQ_POLLIN) {
         int size = 0;
@@ -53,7 +53,7 @@ int main(int argc, const char *argv[]) {
         if (size - cube.size()) continue;
         rect.set_from_3d_led_pkt(cube.data());
         convert();
-        publisher(polar.data(), polar.size());
+        publisher(polar);
       }
     }
   } catch (std::exception const &e) {

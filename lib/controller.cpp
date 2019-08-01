@@ -31,7 +31,7 @@ void controller::clear() {
 }
 void controller::send() {
   if (m_mode == rectangular_mode) m_conv();
-  m_pub(m_polar.data(), m_polar.size());
+  m_pub(m_polar);
 }
 void controller::sleep(int ms) {
   auto now = std::chrono::system_clock::now();

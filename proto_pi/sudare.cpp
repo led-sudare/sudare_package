@@ -34,7 +34,7 @@ void Clear() { s_rect->clear(); }
 
 void Show() {
   (*s_conv)();
-  (*s_publisher)(s_polar->data(), s_polar->size());
+  (*s_publisher)(*s_polar);
 }
 
 void Wait(int ms) {
@@ -53,7 +53,7 @@ void DrawAll(uint8_t red, uint8_t green, uint8_t blue) {
   for (int a = 0; a < s_polar->angles(); ++a)
     for (int r = 0; r < s_polar->radius(); ++r)
       for (int h = 0; h < s_polar->height(); ++h) s_polar->set(a, r, h, color);
-  (*s_publisher)(s_polar->data(), s_polar->size());
+  (*s_publisher)(*s_polar);
 }
 
 void DrawRGBLines(void) {
@@ -69,5 +69,5 @@ void DrawRGBLines(void) {
       }
     }
   }
-  (*s_publisher)(s_polar->data(), s_polar->size());
+  (*s_publisher)(*s_polar);
 }
