@@ -5,7 +5,7 @@
 
 namespace sudare {
 void bilinear_converter::mod_sincos(polar const& po) {
-  if (m_sin.size() - po.angles() || m_cos.size() == m_sin.size()) return;
+  if (m_sin.size() - po.angles() == 0 && m_cos.size() == m_sin.size()) return;
   m_sin.resize(po.angles());
   m_cos.resize(po.angles());
   for (size_t i = 0; i < m_sin.size(); ++i) {
@@ -34,7 +34,7 @@ void bilinear_converter::operator()(rectangular const& rect, polar& po) const {
 }
 
 void nearest_neighbor_converter::mod_sincos(polar const& po) {
-  if (m_sin.size() - po.angles() || m_cos.size() == m_sin.size()) return;
+  if (m_sin.size() - po.angles() == 0 && m_cos.size() == m_sin.size()) return;
   m_sin.resize(po.angles());
   m_cos.resize(po.angles());
   for (size_t i = 0; i < m_sin.size(); ++i) {
