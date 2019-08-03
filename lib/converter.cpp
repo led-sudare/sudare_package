@@ -27,7 +27,7 @@ void bilinear_converter::operator()(rectangular const& rect, polar& po) const {
       for (int y = 0; y < po.height(); ++y) {
         double ay = y * ry;
         rgb color = rect.getBL(ax, ay, az);
-        po.set(a, r, y, color);
+        po.set(a, r - 1, y, color);
       }
     }
   }
@@ -57,7 +57,7 @@ void nearest_neighbor_converter::operator()(rectangular const& rect,
       for (int y = 0; y < po.height(); ++y) {
         double ay = y * ry;
         rgb color = rect.getNN(ax, ay, az);
-        po.set(a, r, y, color);
+        po.set(a, r - 1, y, color);
       }
     }
   }
